@@ -1,0 +1,114 @@
+\documentclass[11pt,twoside,a4paper]{book}
+
+\usepackage[british]{babel}   % use UK hyphenation, etc.
+\usepackage[T1]{fontenc}      % font printing stuff
+\usepackage{ae,aecompl}       % scalable, non-bitmap fonts
+\usepackage[pdftex]{graphicx} % enables graphics for pdf-latex
+\usepackage{color}            % enables use of colour for text
+\usepackage{subfig}           % enables subfigures
+\usepackage{amsmath}          % the one and only AMS-Math
+
+% ----------------------------------------------------------
+% My own commands
+% ----------------------------------------------------------
+\newcommand{\mynote}[1]{\emph{\textbf{\textcolor{red}{#1}}}}
+\newcommand{\ra}{$\rightarrow$}
+\newcommand{\cmd}[1]{\texttt{#1}}
+\newcommand{\ogs}{OpenGeoSys }
+\newcommand{\bstart}[1]{\noindent\textbf{#1} }
+
+
+% ----------------------------------------------------------
+% Typography
+% ----------------------------------------------------------
+\nonfrenchspacing             % grosser Abstand nach Satzende
+\widowpenalty 10000           % Keine Hurenkinder
+\displaywidowpenalty 10000    % Keine Hurenkinder (Formeln)
+\clubpenalty 10000            % Keine Schusterjungen
+
+
+% ----------------------------------------------------------
+% Headers
+% ----------------------------------------------------------
+\usepackage{fancyhdr}         % formating page headers
+
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancyhead{} \fancyfoot{}
+\fancyhead[RE]{The OpenGeoSys Data Explorer}
+%\fancyhead[RE]{\nouppercase{\leftmark}}
+\fancyhead[LO]{\nouppercase{\leftmark}}
+\fancyhead[LE,RO]{\thepage}
+
+
+% ----------------------------------------------------------
+% Hyperref Options
+% MUSS AM SCHLUSS DER PRAEAMBEL STEHEN!
+% ----------------------------------------------------------
+\usepackage{hyperref}         % references and links within the document
+
+\hypersetup{
+  pdftitle={OGS Data Explorer - User Manual},
+  pdfsubject={Manual},
+  pdfauthor={Karsten Rink},
+  pdfcreator={LaTeX2e},
+  plainpages=false,           % For problems with page referencing
+  hypertexnames=false,        % For handling subfigures correctly
+  bookmarks=true,             % I want bookmarks
+  bookmarksnumbered=false,    % Include the section numbers in the list
+  bookmarksopen=true,         % In the list, display highest level only
+  bookmarksopenlevel=3,       % Display three levels of bookmarks
+  pdfpagemode=UseNone,        % Fit screen (or "`FullScreen"')
+  pdfstartview=Fit,
+  pdfborder=0,                % I don't want those silly boxes
+  breaklinks=true,            % Allow breaks in links
+  colorlinks=false            % Don't change coloring of links
+}
+
+
+% ----------------------------------------------------------
+% Document description
+% ----------------------------------------------------------
+\title{{\LARGE OpenGeoSys Data Explorer}\\[0.5em] Manual}
+\author{Karsten Rink}
+\graphicspath{{pics/}}
+\setlength{\fboxsep}{0mm}
+\linespread{1.10}
+
+\hyphenation{know-ledge}
+
+% ----------------------------------------------------------
+% Start of document
+% ----------------------------------------------------------
+\begin{document}
+
+\pagestyle{empty}
+\maketitle
+\newpage
+
+\vspace*{16cm}
+\begin{tabbing}
+
+\hspace*{14cm}\=aa\kill
+\noindent This manual has been compiled based \> \\on the \ogs Data Explore 5.1 \> \\(released on 03 March 2011). \> \\
+\> \\
+\noindent Many thanks to Lars Bilke and Thomas \> \\ Fischer and everyone else helping with \> \\ the development of the software. \> \\
+\end{tabbing}
+
+\newpage
+
+\tableofcontents
+
+\cleardoublepage
+
+\pagestyle{fancy}
+
+\include{ch01-introduction}
+
+\include{ch02-workflow}
+
+\include{ch03-funcindex}
+
+\cleardoublepage
+
+\end{document}
