@@ -82,9 +82,11 @@ The DataView for geometrical information contains a list of geometries. Each geo
 \caption{Examples for inconsistencies within the data. The left image show inconsistencies between two meshes. The right images show a number of boreholes, one of which has a wrong offset.} \label{fig:error}
 \end{figure}
 
-The render window is the part of the GUI where all the data is visualised in a user-controlled 3D scene. The process of ``drawing'' an object in the render window is technically called the \emph{rendering} of the object and will be referred to as such in the following. Currently there is not much that can be done here except for rotation, translation and scaling of the data visualised here. But this is where you can actually see your data as well as the effects of all the changes you do somewhere else in the programm or in the input files.
+The render window is the part of the GUI where all the data is visualised in a user-controlled 3D scene. The process of ``drawing'' an object in the render window is technically called the \emph{rendering} of the object and will be referred to as such in the following. The render window is where you can actually see your data as well as the effects of all the changes you do somewhere else in the programm or in the input files.
 
 One of the big advantages of the Data Explorer is in the fact that this visual inspection of the data also allows you to assess your data and to find inconsistencies and errors. Figure \ref{fig:error} gives examples of such inconsistencies.
+
+You can manipulate the 3d view by using the mouse. Holding the left mouse button and moving the mouse rotation the view point around the focal point of the scene (by default this is the center point of your data). By holding the middle mouse button you can pan the view which means you translate left / right and up / down. By holding the right mouse button or moving the mouse wheel you can zoom in and out. There is alternative mouse button functionality assignment which is activated by holding the Spacebar. When activated left clicks pick a cell of the actually selected visualisation pipeline object. On right clicking the picked position is set as the focal point of the camera. This is useful for a better examination of an interesting region of the data so with focal point set to that region you can easily rotate and zoom around.
 
 \subsection{Visualization Pipeline}
 
