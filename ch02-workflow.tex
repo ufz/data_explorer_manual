@@ -3,6 +3,7 @@
 \section{Loading data...}
 
 \subsection{Native File Formats}
+\label{nativefileformats}
 
 \ogs has a large number of native file formats for storing geometrical data (*.gli), meshes (*.msh), processes (*.pcs), FEM conditions (such as boundary conditions (*.bc)) and material properties (e.g. fluid properties (*.mfp)) and many more.
 
@@ -17,11 +18,11 @@ You can open native OGS files by clicking \cmd{File\ra Open...}. Supported nativ
 \item Observation sites (*.stn)\\
     XML file format containing information for observation stations as well as boreholes. The files also describe points in space but with additional information (such as stratigraphic information for boreholes). Also, this data is visualised in a different way.
 \item Mesh files (*.msh) containing structured or unstructured grids.
-\item FEM conditions (*.bc, *.ic, *.st)\\
-    Describing inital- and boundary conditions as well as source terms as special geometrical objects (points, polylines, surfaces) with additional information important for a subsequent simulation.
-\item FEM conditions (*.cnd)
-    XML file format of the previous kind of data.
+\item \ogs project files (*.gsp)\\
+    XML file format for \ogs projects. These files contain files related to a given project. All of these files will be loaded upon loading the *.gsp file. This is especially useful for projects consisting of a large number of input files.
 \end{itemize}
+    
+Additionally, right-clicking on any geometry in the data view will give you the option \cmd{Add FEM Condition...} which allows you to load FEM condition files in ASCII (*.bc, *.ic, *.st) or XML-format (*.cnd). These files describe inital- and boundary conditions as well as source terms that are associated with pre-defined geometrical objects (points, polylines, surfaces) with additional information important for a subsequent simulation. Currently (as of version 5.1.02) most FEM Conditions will be correctly displayed in the data view and render window. Problems will arise with certain special process distribution types such as ``DIRECT''. Also, the correct scalar values in the render window will currently only be displayed for process distribution types ``CONSTANT'' and ``LINEAR''.\footnote{For an overview over what process distribution types are, which types are supported by the system and how they influence a subsequent simulation please refer to technical documentation of \ogs.}
 
 \subsection{Import File Formats}
 
@@ -86,7 +87,9 @@ The render window is the part of the GUI where all the data is visualised in a u
 
 One of the big advantages of the Data Explorer is in the fact that this visual inspection of the data also allows you to assess your data and to find inconsistencies and errors. Figure \ref{fig:error} gives examples of such inconsistencies.
 
-You can manipulate the 3d view by using the mouse. Holding the left mouse button and moving the mouse rotation the view point around the focal point of the scene (by default this is the center point of your data). By holding the middle mouse button you can pan the view which means you translate left / right and up / down. By holding the right mouse button or moving the mouse wheel you can zoom in and out. There is alternative mouse button functionality assignment which is activated by holding the Spacebar. When activated left clicks pick a cell of the actually selected visualisation pipeline object. On right clicking the picked position is set as the focal point of the camera. This is useful for a better examination of an interesting region of the data so with focal point set to that region you can easily rotate and zoom around.
+You can manipulate the 3d view by using the mouse. Holding the left mouse button and moving the mouse rotation the view point around the focal point of the scene (by default this is the center point of your data). By holding the middle mouse button you can pan the view which means you translate left / right and up / down. By holding the right mouse button or moving the mouse wheel you can zoom in and out. 
+
+There is alternative mouse button functionality assignment which is activated by holding the Spacebar. When activated left clicks pick a cell of the actually selected visualisation pipeline object. On right clicking the picked position is set as the focal point of the camera. This is useful for a better examination of an interesting region of the data so with focal point set to that region you can easily rotate and zoom around.
 
 \subsection{Visualization Pipeline}
 
@@ -101,7 +104,7 @@ Section \ref{filters} explains how you can employ the visualisation pipeline to 
 \section{Writing Data...}
 
 \subsection{Native Files}
-You can save geometries, observation sites and meshes by right-clicking them in the Data View and selecting \cmd{Save data...}. You can also save all loaded data files by saving an \ogs project. Select \cmd{File\ra Save as...} and specify a project name. This option will save all geometries in *.gml files and all observation sites in *.stn files. Additionally it will create a project file (*.gsp). When loading the gsp-file later on it will also load the respective geometries and observation sites again.
+You can save geometries, observation sites and meshes by right-clicking them in the Data View and selecting \cmd{Save data...}. You can also save all loaded data files by saving an \ogs project. Select \cmd{File\ra Save as...} and specify a project name. This option will save all geometries in *.gml files, all mesh meshes in *.msh files and all observation sites in *.stn files. Additionally it will create a project file (*.gsp). When loading the gsp-file later on it will also load the respective geometries and observation sites again. (Note: Other file formats -- e.g. for boundary conditions or processes -- will be added in the future)
 
 \subsection{Export to Other Formats}
 
