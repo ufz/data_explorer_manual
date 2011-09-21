@@ -21,8 +21,8 @@ You can open native OGS files by clicking \cmd{File\ra Open...}. Supported nativ
 \item \ogs project files (*.gsp)\\
     XML file format for \ogs projects. These files contain files related to a given project. All of these files will be loaded upon loading the *.gsp file. This is especially useful for projects consisting of a large number of input files.
 \end{itemize}
-    
-Additionally, right-clicking on any geometry in the data view will give you the option \cmd{Add FEM Condition...} which allows you to load FEM condition files in ASCII (*.bc, *.ic, *.st) or XML-format (*.cnd). These files describe initial and boundary conditions as well as source terms that are associated with pre-defined geometrical objects (points, polylines, surfaces) with additional information important for a subsequent simulation. Currently (as of version 5.1.02) most FEM Conditions will be correctly displayed in the data view and render window. Problems will arise with certain special process distribution types such as ``DIRECT''. Also, the correct scalar values in the render window will currently only be displayed for process distribution types ``CONSTANT'' and ``LINEAR''.\footnote{For an overview over what process distribution types are, which types are supported by the system and how they influence a subsequent simulation please refer to technical documentation of \ogs.}
+
+Additionally, right-clicking on any geometry in the data view will give you the option \cmd{Add FEM Condition...} which allows you to load FEM condition files in ASCII (*.bc, *.ic, *.st) or XML-format (*.cnd). These files describe initial and boundary conditions as well as source terms that are associated with pre-defined geometrical objects (points, polylines, surfaces) with additional information important for a subsequent simulation. Currently (as of version 5.2.03) most FEM Conditions will be correctly displayed in the data view and render window. As an alternative, you may add source terms of the process distribution ``DIRECT'' directly on meshes (again, via right-clicking on a mesh) and the conditions will then be displayed on the respective mesh nodes defined in the input file. For the visualisation, the correct scalar values in the render window will currently only be displayed for process distribution types ``CONSTANT'' and ``LINEAR''.\footnote{For an overview over what process distribution types are, which types are supported by the system and how they influence a subsequent simulation please refer to technical documentation of \ogs.}
 
 \subsection{Import File Formats}
 
@@ -50,6 +50,8 @@ Mesh files containing unstructured grids. As an exception these files are \emph{
 This interface is in an unfinished state. However, there exists a programming interface to write OGS-files directly from GoCAD. Please talk to the development team if you need to load data into OGS.
 \item \textbf{NetCDF} files (*.nc, *.cdf)\\
 A machine-independent format that contains all kinds array-oriented scientific data. This interface works only under certain circumstances and you should probably talk to the development team if you want to load netCDF files into OGS.
+\item \textbf{FEFLOW} files\\
+Allows the import of FEFLOW geometry and meshes.
 \item \textbf{Petrel} files\\
 This interface is in an unfinished state. Please talk to the development team if you need to load data into OGS.
 \item \textbf{Raster} files (*.asc, *.bmp, *.jpg, *.png, *.tif)\\
@@ -73,6 +75,8 @@ There are four different DataView-Tabs in the programme where the data is visibl
 
 The DataView for geometrical information contains a list of geometries. Each geometry-item has up to three children titled ``Points'', ``Polylines'' and ``Surfaces'' containing the information about the respective geometrical objects. For example, the item `Points' contains a list of points and for each item (i.e. each point) its index, the coordinates and (if existing) the name of the object can be displayed. Each geometry \emph{needs} to contain a list of points. Other geometrical objects (i.e. polylines or surfaces) are optional.
 
+Note, that the mesh-tab is subdivided into a few of the meshes loaded into the programme (and the elements contained within each mesh) and a second window called ``Element Properties''. If you pick any element from the render window, all available information concerning that element (such as nodes, volume, element type, etc.) will be displayed here. For more information on how to pick mesh elements, see the next section.
+
 \subsection{Render Window}
 
 \begin{figure}[tb]
@@ -87,9 +91,11 @@ The render window is the part of the GUI where all the data is visualised in a u
 
 One of the big advantages of the Data Explorer is in the fact that this visual inspection of the data also allows you to assess your data and to find inconsistencies and errors. Figure \ref{fig:error} gives examples of such inconsistencies.
 
-You can manipulate the 3d view by using the mouse. Holding the left mouse button and moving the mouse rotation the view point around the focal point of the scene (by default this is the center point of your data). By holding the middle mouse button you can pan the view which means you translate left / right and up / down. By holding the right mouse button or moving the mouse wheel you can zoom in and out. 
+You can manipulate the 3d view by using the mouse. Holding the left mouse button and moving the mouse rotation the view point around the focal point of the scene (by default this is the center point of your data). By holding the middle mouse button you can pan the view which means you translate left / right and up / down. By holding the right mouse button or moving the mouse wheel you can zoom in and out.
 
-There is alternative mouse button functionality assignment which is activated by holding the Spacebar. When activated left clicks pick a cell of the actually selected visualisation pipeline object. On right clicking the picked position is set as the focal point of the camera. This is useful for a better examination of an interesting region of the data so with focal point set to that region you can easily rotate and zoom around.
+There is alternative mouse button functionality assignment which is activated by holding the Spacebar. When activated, left clicks pick a cell of the actually selected visualisation pipeline object. This allows to mark a certain cell of the visualisation, such as the selection of a mesh element for displaying information related to that element. On right clicking the picked position is set as the focal point of the camera. This is useful for a better examination of an interesting region of the data so with focal point set to that region you can easily rotate and zoom around.
+
+You can deselect the cell by holding Spacebar and clicking somewhere into the background of the render window.
 
 \subsection{Visualization Pipeline}
 
@@ -108,6 +114,10 @@ You can save geometries, observation sites and meshes by right-clicking them in 
 
 \subsection{Export to Other Formats}
 
-You can export data from \ogs into a number of graphics formats. This can be done for selected graphical objects by right-clicking the respective object in the visualisation pipeline and than select the desired format (VTK or OpenSG). Details on this can be found in section \ref{specvisoptions}.
+Any geometric data loaded into \ogs can be exported into a GMSH *.geo file via \cmd{File\ra Save as...} and selecting ``GMSH gemetry files'' as the output format. Note, that this will merge all geometries loaded into the programme and that it will also save station-data as points (i.e. you lose any additional information associated with these stations). Before saving, the geometric information will be inserted into a quad tree structure to analyse the data and insert additional points (so-called `Steiner Points') at locations where not enough information for generation of a suitable mesh exists. This ensures the creation of an adequate result when meshing the geo-file within GMSH.\footnote{Note that this allows you to export any combination of data into GMSH format for subsequent meshing. The functionality described in section \ref{meshcreation} for meshing of data within \ogs requires a ``bounding polygon'' that serves as outer boundary of all the data contained within the mesh.}
+
+\bigskip
+
+You can also export data from \ogs into a number of graphics formats. This can be done for selected graphical objects by right-clicking the respective object in the visualisation pipeline and than select the desired format (VTK or OpenSG). Details on this can be found in section \ref{specvisoptions}.
 
 You can also export the complete scene into the graphic formats VTK, OpenSG or VRML format. To do this select \cmd{File\ra Export\ra Format}. 

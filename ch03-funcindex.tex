@@ -18,6 +18,7 @@ This function closes a (connected) polyline. Simply check `Close connected Polyl
 This function additionally creates a new surface by triangulating the polygon. This simply requires checking `Create Surface from Polyline'. The newly created polyline has to be closed for that function to work. If a name has been entered, this name will be assigned to the surface.
 
 \section{Creating Meshes from Geometry}
+\label{meshcreation}
 
 By selecting \cmd{Tools\ra Mesh Generation...} you open a dialog that allows you to create meshes using information currently present in the programme. For this to work you have to have GMSH\footnote{http://geuz.org/gmsh/} installed and be available from the location of the Data Explorer.
 
@@ -50,10 +51,14 @@ Default parameters for all options are already predefined and have worked well w
 
 \section{Extruding Meshes to 3D}
 
-Any 2D mesh loaded into \ogs can be extruded into a 3D mesh by copying the 2D mesh layer a specified number of times and then connected any two neighbouring layers by creating 3D elements from all corresponding 2D elements (i.e. two triangles are connected and form one prism-elements, two quadrilateral elements form one hexahedron). This functionality can be accessed by right-clicking on a mesh in the data view and selecting \cmd{Edit Mesh...}. In the \cmd{3D Extrusion}-tab of the resulting dialog the number of mesh layers and the distance between neighbouring layers can be specified. 
+Any 2D mesh loaded into \ogs can be extruded into a 3D mesh by copying the 2D mesh layer a specified number of times and then connected any two neighbouring layers by creating 3D elements from all corresponding 2D elements (i.e. two triangles are connected and form one prism-elements, two quadrilateral elements form one hexahedron). This functionality can be accessed by right-clicking on a mesh in the data view and selecting \cmd{Edit Mesh...}. In the \cmd{3D Extrusion}-tab of the resulting dialog the number of mesh layers and the distance between neighbouring layers can be specified.
 
-For assigning elevation profiles to each layer, select the \cmd{Layer Mapping}-tab. Here, for each layer of the mesh a raster file in *.asc format can be selected and will be assigned to the respective mesh layer. 
+\section{Mapping of Meshes based on DEMs}
+
+For assigning elevation profiles to each layer, select the \cmd{Layer Mapping}-tab. Here, for each layer of the mesh a raster file in *.asc format can be selected and will be assigned to the respective mesh layer.
 \emph{Note that currently the check if two layers are intersecting each other does \emph{not} work correctly!}
+
+For meshes containing only 2D elements there is also an option ``Remove mesh nodes at NoData values''. Per default this option is switched off as will obviously change the mesh.
 
 \section{Analyse Mesh Quality}
 
