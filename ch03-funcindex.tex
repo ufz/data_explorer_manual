@@ -1,30 +1,49 @@
 \chapter{Data Manipulation}
 
 \section{Manipulating Geometrical Data}
+\index{Manipulating geometrical data}
 
 There is a small number of function to manipulate geometric data in \ogs. The common approach to the manipulation of \ogs input data is that it should be changed in a GIS or other specialised software of the user's choice which usually offers much more functionality for these things than \ogs ever could.
 
-Functions for the manipulation of geometric data that \emph{are} implemented are all associated with polylines and can be applied by right-clicking the ``Polylines'' item of any geometry and selecting \cmd{Connect Polylines...}.
+However, it is possible to set or change names for any geometrical object by right-clicking on the object and selecting \cmd{Set name...}\index{Setting names}\index{Changing names}. Upon saving the data again, the new or modified names will be saved in the corresponding file.
+
+Functions for the actual manipulation of geometric data that \emph{are} implemented are all associated with polylines and can be applied by right-clicking the ``Polylines'' item of any geometry and selecting \cmd{Connect Polylines...}.
 
 \subsubsection{Connecting Polylines}
+\index{Connecting polylines}
 This function connects all the selected polylines to a single new polyline provided that the start- and end points of all segments are within the given maximum distance. The default maximum distance is $0.0$, meaning that start- and end points have to be identical.
 
 Note that if more than two start/end points are located within the given maximum distance, still only two of those points are connected. These points are chosen randomly.
 
 \subsubsection{Creating Polygons by Closing Polylines}
+\index{Creating polygons from polylines}
 This function closes a (connected) polyline. Simply check `Close connected Polyline'. If a name has been entered, this name will be assigned to the closed polyline.
 
 \subsubsection{Creating Surfaces by Triangulating Polygons}
+\index{Creating surfaces from polygons}
 This function additionally creates a new surface by triangulating the polygon. This simply requires checking `Create Surface from Polyline'. The newly created polyline has to be closed for that function to work. If a name has been entered, this name will be assigned to the surface.
 
+\section{Creating Processes}
+\index{Creating processes}
+
+It is possible to add processes to the workflow in the modelling-tab by pressing the \cmd{Add process...}-button. A dialog will open that allows to select a process type and an associated primary variable. As of version 5.2.07 this has no effect except for boundary conditions being grouped under these processes and being removed upon removing the process (via right-click \cmd{Remove process}).
+
+\section{Creating FEM Conditions}
+\index{Creating FEM conditions}
+\index{Creating boundary conditions}
+
+It is possible to create FEM conditions based on geometric objects. By right-clicking on the respective point, polyline or surface and selecting \cmd{Set as FEM condition...} a dialog will open. Here, it can be specified for which process and primary variable the condition should be used and if it should be a boundary condition, a source term or an initial condition. Based on the geometrical object type and the selection of the condition type a number of distribution types will be available. For example, points as boundary conditions can only have Constant (Direchlet) distribution; lines as source terms can have Constant (Neumann) or Linear (Neumann) distribution, etc.
+
+Once created, FEM conditions can be saved. Currently this is only possible from the associated geometry by right-clicking the geometry and selecting \cmd{Save FEM conditions...}. This will likely be changed in the future.
+
 \section{Creating Meshes from Geometry}
-\label{meshcreation}
+\label{meshcreation}\index{Creating meshes}
 
-By selecting \cmd{Tools\ra Mesh Generation...} you open a dialog that allows you to create meshes using information currently present in the programme. For this to work you have to have GMSH\footnote{http://geuz.org/gmsh/} installed and be available from the location of the Data Explorer.
+By selecting \cmd{Tools\ra Mesh Generation...} a dialog that allows appears that allows the user to create meshes using information currently present in the programme. For this to work, the open-source mesh generating software GMSH\footnote{http://geuz.org/gmsh/} needs to be installed and be available from the location of the Data Explorer (i.e. located in the same directory or findable, e.g. via PATH-variable).
 
-Specifically, you can select any geometry and observation sites that should be considered for generating the mesh. Note that all points of every data set considered for mesh generation will be included as nodes in the final mesh. Upon pressing \cmd{OK} a geometry-file for GMSH is written, GMSH is called to create the mesh and the newly created mesh is at once imported in the \ogs-Data Explorer.
+Specifically, the user can select any geometry and observation sites that should be considered for generating the mesh. Note that all points of every data set considered for mesh generation will be included as nodes in the final mesh. Upon pressing \cmd{OK} a geometry-file for GMSH is written, GMSH is called to create the mesh and the newly created mesh is at once imported in the \ogs-Data Explorer.
 
-There is an \cmd{Advanced}-Tab in this dialog that allows you set a number of parameters for the mesh. Most importantly you can select if you want an adaptive mesh or a homogeneous mesh. An adaptive mesh is refined towards points or lines specified in the geometry while a homogeneous mesh has elements of roughly the same size everywhere in the domain (see figure \ref{fig:meshing}).
+There is an \cmd{Advanced}-Tab in this dialog that allows to set a number of parameters for the mesh. Most importantly, it can be chosen, if the new mesh should be adaptive or homogeneous. An adaptive mesh{Adaptive Meshes} is refined towards points or lines specified in the geometry while a homogeneous mesh\index{Homogeneous meshes} has elements of roughly the same size everywhere in the domain (see figure \ref{fig:meshing}).
 
 \begin{figure}[tb]
 \begin{center}
@@ -43,17 +62,40 @@ The specific parameters for adaptive meshes are:
 \item \textbf{Mesh density scaling for stations:} This is exactly the same kind of scaling factor as for the option above, only for refinement towards observation sites.
 \end{itemize}
 
-Likewise, you can select an \textbf{Element Size} for homogeneous meshes. Here, too, a smaller number will result in a finer mesh.
+Likewise, you can select an \textbf{element size}\index{Element size} for homogeneous meshes. Here, too, a smaller number will result in a finer mesh.
 
 \bigskip
 
 Default parameters for all options are already predefined and have worked well with most examples that have been tested. Feel free to play around with these numbers but realise that the resulting mesh might not be what you have in mind.
 
+\section{Creating Meshes from Raster Files}
+\label{meshraster}\index{Creating meshes}
+
+\begin{figure}[tb]
+\begin{center}
+\subfloat[Raster]{\includegraphics[width=0.3\linewidth]{rastermesh1}\label{rastermesh1}}\enspace
+\subfloat[Elevation]{\includegraphics[width=0.3\linewidth]{rastermesh2}\label{rastermesh2}}\enspace
+\subfloat[Materials]{\includegraphics[width=0.3\linewidth]{rastermesh3}\label{rastermesh3}}
+\end{center}
+\caption{Creating meshes from raster files: Pixels can be either represented as a set of two triangles (Fig. \ref{rastermesh2}) or a square (Fig. \ref{rastermesh3}), intensities may represent elevation (Fig. \ref{rastermesh2}) or materials (Fig. \ref{rastermesh3}).} 
+\label{fig:rastermesh}
+\end{figure}
+
+A completely different way to create a mesh is based on image or raster files, such as *.asc-files from ArcGIS. If the file is loading into the Data Explorer it will appear in the visualisation pipeline only. Right clicking the object allows to select the menu item \cmd{Convert Image to Mesh...}. A dialog allows the parameterise how exactly this conversion should be performed. Specifically, it is possible to select a mesh element type for representation of pixels and a way in which grey-values should be interpreted\footnote{Meshes can also be generated from colour images. However, the colours will be converted to grey-values via $g = 0.3*\text{red}+0.6*\text{green}+0.1*\text{blue}$.}.
+
+For the first parameter, pixels can be converted into a square (i.e. a quadrilateral element) or two rectilinear triangles (i.e. two triangle elements). In the future it is also planned to offer cubes (i.e. a hexahedron) for multi-layered images.
+
+For the second parameter the user can decide pixel values should be interpreted as elevation (which is useful if the raster represents a digital elevation model) or if the grey-values should be assigned as scalar values to the mesh elements. As an alternative, these values can also be ignored (see Fig. \ref{fig:rastermesh} for examples).
+
+If the raster file contains ``NoData''-values (this is common in raster files created with a Geographic Information Systems), these values are ignored and will after the conversion not appear as mesh-elements (i.e. despite the raster file always being rectilinear the resulting mesh may have an arbitrary boundary defined be pixels actually containing information).
+
 \section{Extruding Meshes to 3D}
+\index{Extruding meshes}
 
 Any 2D mesh loaded into \ogs can be extruded into a 3D mesh by copying the 2D mesh layer a specified number of times and then connected any two neighbouring layers by creating 3D elements from all corresponding 2D elements (i.e. two triangles are connected and form one prism-elements, two quadrilateral elements form one hexahedron). This functionality can be accessed by right-clicking on a mesh in the data view and selecting \cmd{Edit Mesh...}. In the \cmd{3D Extrusion}-tab of the resulting dialog the number of mesh layers and the distance between neighbouring layers can be specified.
 
 \section{Mapping of Meshes based on DEMs}
+\index{Mapping meshes}
 
 For assigning elevation profiles to each layer, select the \cmd{Layer Mapping}-tab. Here, for each layer of the mesh a raster file in *.asc format can be selected and will be assigned to the respective mesh layer.
 \emph{Note that currently the check if two layers are intersecting each other does \emph{not} work correctly!}
@@ -61,6 +103,7 @@ For assigning elevation profiles to each layer, select the \cmd{Layer Mapping}-t
 For meshes containing only 2D elements there is also an option ``Remove mesh nodes at NoData values''. Per default this option is switched off as will obviously change the mesh.
 
 \section{Analyse Mesh Quality}
+\index{Mesh quality}
 
 You can visualise the quality of a given mesh by right-clicking on the mesh in the respective data view and selecting \cmd{Check Mesh Quality...}. This allows to choose between currently four implemented measurements for mesh element quality. The result of choosing any of these modes is a colour-codes overlay of the mesh where every element is assigned a quality in $[0,1]$. You can select this overlay in the visualisation pipeline and specify thresholds to select a certain range of quality and see which element fall into that range. \emph{(Note: You might need to manually set the correct scalar array for visualising mesh quality. The appropriate data can be chosen by selecting in ``C-Selection'' in the \cmd{Active Scalar} pull-down menu.}
 
@@ -89,6 +132,7 @@ The currently implemented measures are the following:
 The quality measure best suited for a given mesh might depend on the process you want to simulate using this mesh. For instance, processes such as groundwater recharge consist mainly of layered flows, meaning that large differences between horizontal and vertical element surfaces might have no effect on a correct result. The simulation of mass transport processes explicitly requires a fine mesh resolution in vertical direction to ensure a stable solution.
 
 \section{Time series data and stratigraphic data}
+\index{Time series data}\index{Stratigraphic data}
 
 For observation sites it is possible to display additional information such as logger data at the site or the stratigraphy at a borehole. Both features are currently only implemented as a proof of concept and need to be expanded in the future.
 
