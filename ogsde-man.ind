@@ -17,7 +17,7 @@
   \item Contour filter, \hyperpage{31}
   \item Creating boundary conditions, \hyperpage{18}
   \item Creating FEM conditions, \hyperpage{18}
-  \item Creating meshes, \hyperpage{19, 20}
+  \item Creating meshes, \hyperpage{19}, \hyperpage{21}
   \item Creating polygons from polylines, \hyperpage{18}
   \item Creating processes, \hyperpage{18}
   \item Creating surfaces from polygons, \hyperpage{18}
@@ -43,7 +43,7 @@
   \indexspace
 
   \item Geometry, \hyperpage{9}
-  \item Glyph ilter, \hyperpage{32}
+  \item Glyph Filter, \hyperpage{32}
   \item GMS files, \hyperpage{12}
   \item GMSH files, \hyperpage{12}
   \item GoCAD files, \hyperpage{12}
@@ -71,7 +71,7 @@
   \indexspace
 
   \item Manipulating geometrical data, \hyperpage{17}
-  \item Mapping meshes, \hyperpage{21}
+  \item Mapping meshes, \hyperpage{22}
   \item Mesh quality, \hyperpage{22}
   \item Meshes, \hyperpage{10}
 
@@ -130,7 +130,7 @@
 
   \indexspace
 
-  \item Visualisation setttings, \hyperpage{25}
+  \item Visualisation settings, \hyperpage{25}
   \item Visualization pipeline, \hyperpage{15}
   \item VTK, \hyperpage{7}
   \item VTK export, \hyperpage{28}
