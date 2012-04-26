@@ -8,28 +8,47 @@
 
 \ogs has a large number of native file formats for storing geometrical data (*.gli), meshes (*.msh), processes (*.pcs), FEM conditions (such as boundary conditions (*.bc)) and material properties (e.g. fluid properties (*.mfp)) and many more.
 
-Not all of them can be loaded into the user interface since not all of them contain data that can be visualised. Things are additionally made difficult as the file standards for the programm are currently changed to XML files\footnote{http://www.w3.org/XML/}. For this reason there exists -- at least at the time of this writing -- two file standards for certain kinds of objects. Hopefully, this unfortunate situation is resolved soon.
+Not all of them can be loaded into the user interface since not all of them contain data that can be visualised. Things are additionally made difficult as the file standards for the programm are currently changed from GeoSys4 ASCII files to OGS XML files\footnote{http://www.w3.org/XML/}. For this reason there exists -- at least at the time of this writing -- two file standards for certain kinds of data. Hopefully, this unfortunate situation is resolved soon.
 
-You can open native OGS files by clicking \cmd{File\ra Open...}\index{Loading geometry}\index{Loading meshes}. Supported native \ogs formats are:
+You can open native OGS files by clicking \cmd{File\ra Open...}\index{Loading geometry}\index{Loading meshes}.
+
+Supported native files in GeoSys4 \textbf{ASCII} format are:
 \begin{itemize}
-\item Geometrical data files (*.gli)\index{Geometry}\\
+\item Geometry (*.gli)\index{Geometry}\\
     Containing geometrical data such as points, polylines and surfaces (in this file format surfaces are defined by closed polylines and are therefore always describing planes).
-\item Geometrical XML data files (*.gml)\\
-    Containing geometrical data such as points, polylines and surfaces (in this file format surfaces are triangulated and can therefore describe any kind of surface).
 \item Meshes (*.msh)\index{Meshes}\\
     Domain discretisation in 2D or 3D. Each mesh contains a set of nodes (points) as well as a set of elements defined by a subset of these nodes. A mesh may contain different kinds of elements. OGS supports the following element types\index{Element types}: lines, triangles, quadrilaterals, tetrahedra, hexahedra, pyramids, prisms.\\
     Meshes may be classified into structured or unstructured meshes. Note, that \ogs treats all meshes as unstructured.
+\item FEM Conditions (*.bc, *.ic, *.st): Containing boundary conditions, initial conditions and source terms, respectively. These files contain information that links phenomena with a given set of values (or distribution of values) to geometric objects or mesh nodes.
+\end{itemize}
+
+Supported OGS \textbf{XML} file formats are:
+\begin{itemize}
+\item Geometry files (*.gml)\\
+    Containing geometrical data such as points, polylines and surfaces (in this file format surfaces are triangulated and can therefore describe any kind of surface).
 \item Observation sites (*.stn) \index{Stations}\index{Boreholes}\\
     XML file format containing information for observation stations as well as boreholes. The files also describe points in space but with additional information (such as stratigraphic information for boreholes). Also, this data is visualised in a different way.
+\item FEM Conditions (*.cnd): Containing boundary conditions, initial conditions and source terms needed for simulation of processes. These files contain information that links phenomena with a given set of values (or distribution of values) to geometric objects or mesh nodes.
 \item \ogs project files (*.gsp)\index{Project files}\\
     XML file format for \ogs projects. These files contain files related to a given project. All of these files will be loaded upon loading the *.gsp file. This is especially useful for projects consisting of a large number of input files.
 \end{itemize}
 
-Additionally, right-clicking on any geometry in the data view will give you the option \cmd{Add FEM Condition...} which allows you to load FEM condition files in ASCII (*.bc, *.ic, *.st)\index{Loading FEM conditions} or XML-format (*.cnd). These files describe initial and boundary conditions as well as source terms that are associated with pre-defined geometrical objects (points, polylines, surfaces) with additional information important for a subsequent simulation. FEM conditions can also be loaded via \cmd{File\ra Open...}. Upon loading it is then checked if a corresponding geometry for these conditions is available. For XML-files this geometry is saved in the cnd-file, for old file types it is simply assumed that the geometry name will be the same as the name of the condition-file. If no geometry of this name is found, the data will not be loaded.
+\subsubsection{Additional Information about Loading FEM Conditions}
+\index{Loading FEM conditions}
 
-As an alternative, you may add source terms of the process distribution ``DIRECT'' directly on meshes nodes (again, via right-clicking on a mesh) and the conditions will then be displayed on the respective mesh nodes defined in the input file. For the visualisation, the correct scalar values in the render window will currently only be displayed for process distribution types ``CONSTANT'', ``LINEAR'' and ``DIRECT''.\footnote{For an overview over what process distribution types are, which types are supported by the system and how they influence a subsequent simulation please refer to technical documentation of \ogs.}
+Besides loading FEM Conditions via  \cmd{File\ra Open...}, it is also possible to right-click on any geometry in the data view to assign FEM conditions to a geometry via \cmd{Load FEM Condition...}. Upon loading it is checked if a corresponding geometry for these conditions is available. For XML-files the associated geometry name is saved in the cnd-file, for old file types it is simply assumed that the geometry name will be the same as the name of the condition-file. If no geometry of this name is found, the data will not be loaded. You may may also add source terms of the process distribution ``DIRECT'' directly on meshes nodes (again, via right-clicking on a mesh) and the conditions will then be displayed on the respective mesh nodes defined in the input file.
+
+For the visualisation, the correct scalar values in the render window will currently only be displayed for process distribution types ``CONSTANT'', ``LINEAR'' and ``DIRECT''.\footnote{For an overview over what process distribution types are, which types are supported by the system and how they influence a subsequent simulation please refer to technical documentation of \ogs.}
+
+\subsubsection{Conversion of Native Files}
+\index{OGS File Converter}
+
+It is possible to convert data between GeoSys4 ASCII files and \ogs XML files (and vice versa) via the \emph{OpenGeoSys File Converter}. The file converter can be called from \cmd{Tools\ra File Converter...} and is also available as a stand-alone tool upon download of \ogs. Simply select which type of file you would like to convert, specify file names and press okay.
+
+The file converter currently supports conversion of geometry and FEM condition files, but will be extended in the future as file formats are changed to XML.
 
 \subsection{Import File Formats}
+\label{Import File Formats}
 \index{Import file formats}
 
 \begin{figure}[tb]
@@ -55,13 +74,13 @@ Mesh files containing unstructured grids. As an exception these files are \emph{
 \item \textbf{GoCAD} files (*.ts)\index{GoCAD files}\\
 This interface is in an unfinished state. However, there exists a programming interface to write OGS-files directly from GoCAD. Please talk to the development team if you need to load data into OGS.
 \item \textbf{NetCDF} files (*.nc, *.cdf)\index{NetCDF files}\\
-A machine-independent format that contains all kinds array-oriented scientific data. This interface currently only works under certain circumstances and you should probably talk to the development team if you want to load netCDF files into OGS. The result will be a mesh with data values from the netCDF files assigned on the elements. (The workflow is similar to creating meshes from images/rasters, see section \ref{meshraster})
+A machine-independent format that contains all kinds array-oriented scientific data. The interface only works from GUI as it requires to open a dialogue where data dimensions and time steps need to specified. The netCDF date will then be converted into either a mesh or a raster. Conversion into a mesh allows to set more parameters such as the requested mesh element type and the data representation (also see section \ref{meshraster}).
 \item \textbf{FEFLOW} files\index{FEFLOW files}\\
 Allows the import FEFLOW problem ASCII files (*.fem). This interface imports only geometry, e.g. polygons, and meshes.
 \item \textbf{Petrel} files\index{Petrel files}\\
 This interface is in an unfinished state. Please talk to the development team if you need to load data into OGS.
-\item \textbf{Raster} files (*.asc, *.bmp, *.jpg, *.png, *.tif)\index{Raster files}\index{Images}\\
-Image data files that may contain satellite images, etc. Ascii raster files (*.asc) and GeoTIFF (*.tif) files contain geo-referenced data, while common image files (*.bmp, *.jpg, *.png) do not. This interface should work perfectly although it can be quite slow for large raster files.
+\item \textbf{Raster} files (*.asc, *.bmp, *.jpg, *.grd *.png, *.tif)\index{Raster files}\index{Images}\\
+Image data files that may contain satellite images, etc. ESRI and Surfer ASCII raster files (*.asc / *.grd) as well as GeoTIFF (*.tif) files contain geo-referenced data, while common image files (*.bmp, *.jpg, *.png) do not. This interface should work for all supported file types although it can be quite slow for large raster files.
 \item \textbf{TetGen} files\index{TetGen files}\\
 Allows the import files created with the TetGen mesh generator. This interface currently only reads the node- and tetrahedra-files created by the software (i.e. *.node and *.ele).
 \item Visual Toolkit (\textbf{VTK}) files (*.vti, *.vtk, *.vtp, *.vtr, *.vts, *.vtu)\index{VTK files}\\
@@ -110,7 +129,7 @@ You can deselect the cell by holding Spacebar and clicking somewhere into the ba
 
 \bigskip
 
-Note, that you can make screenshots\index{Screenshots} of the content of the render window at any time. Simply press the \cmd{Screenshot}-button located above the render window and a small dialog will open that allows you to select the scaling factor of the image. This is useful for creating large image (e.g. for posters) without artefacts.
+Note, that you can make screenshots\index{Screenshots} of the content of the render window at any time. Simply press the \cmd{Screenshot}-button located above the render window and a small dialogue will open that allows you to select the scaling factor of the image. This is useful for creating large image (e.g. for posters) without artefacts.
 
 \subsection{Visualization Pipeline}
 \index{Visualization pipeline}

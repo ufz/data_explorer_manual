@@ -6,77 +6,85 @@
 \indexentry{Loading geometry|hyperpage}{9}
 \indexentry{Loading meshes|hyperpage}{9}
 \indexentry{Geometry|hyperpage}{9}
-\indexentry{Meshes|hyperpage}{10}
+\indexentry{Meshes|hyperpage}{9}
 \indexentry{Element types|hyperpage}{10}
 \indexentry{Stations|hyperpage}{10}
 \indexentry{Boreholes|hyperpage}{10}
 \indexentry{Project files|hyperpage}{10}
 \indexentry{Loading FEM conditions|hyperpage}{10}
+\indexentry{OGS File Converter|hyperpage}{11}
 \indexentry{Import file formats|hyperpage}{11}
 \indexentry{Shape files|hyperpage}{11}
 \indexentry{GMS files|hyperpage}{12}
 \indexentry{GMSH files|hyperpage}{12}
 \indexentry{GoCAD files|hyperpage}{12}
 \indexentry{NetCDF files|hyperpage}{12}
-\indexentry{FEFLOW files|hyperpage}{12}
-\indexentry{Petrel files|hyperpage}{12}
-\indexentry{Raster files|hyperpage}{12}
-\indexentry{Images|hyperpage}{12}
-\indexentry{TetGen files|hyperpage}{12}
+\indexentry{FEFLOW files|hyperpage}{13}
+\indexentry{Petrel files|hyperpage}{13}
+\indexentry{Raster files|hyperpage}{13}
+\indexentry{Images|hyperpage}{13}
+\indexentry{TetGen files|hyperpage}{13}
 \indexentry{VTK files|hyperpage}{13}
 \indexentry{Removing data|hyperpage}{13}
-\indexentry{DataView|hyperpage}{13}
-\indexentry{Highlighting objects|hyperpage}{13}
-\indexentry{Render window|hyperpage}{14}
-\indexentry{Rotating|hyperpage}{14}
-\indexentry{Translation|hyperpage}{14}
-\indexentry{Zooming|hyperpage}{14}
-\indexentry{Picking|hyperpage}{14}
+\indexentry{DataView|hyperpage}{14}
+\indexentry{Highlighting objects|hyperpage}{14}
+\indexentry{Render window|hyperpage}{15}
+\indexentry{Rotating|hyperpage}{15}
+\indexentry{Translation|hyperpage}{15}
+\indexentry{Zooming|hyperpage}{15}
+\indexentry{Picking|hyperpage}{15}
 \indexentry{Screenshots|hyperpage}{15}
 \indexentry{Visualization pipeline|hyperpage}{15}
 \indexentry{Saving data|hyperpage}{16}
 \indexentry{Export formats|hyperpage}{16}
-\indexentry{Manipulating geometrical data|hyperpage}{17}
-\indexentry{Setting names|hyperpage}{17}
-\indexentry{Changing names|hyperpage}{17}
-\indexentry{Connecting polylines|hyperpage}{17}
-\indexentry{Creating polygons from polylines|hyperpage}{18}
-\indexentry{Creating surfaces from polygons|hyperpage}{18}
-\indexentry{Creating processes|hyperpage}{18}
-\indexentry{Creating FEM conditions|hyperpage}{18}
-\indexentry{Creating boundary conditions|hyperpage}{18}
-\indexentry{Creating meshes|hyperpage}{19}
-\indexentry{Homogeneous meshes|hyperpage}{19}
-\indexentry{Element size|hyperpage}{20}
-\indexentry{Creating meshes|hyperpage}{21}
-\indexentry{Extruding meshes|hyperpage}{21}
-\indexentry{Mapping meshes|hyperpage}{22}
-\indexentry{Mesh quality|hyperpage}{22}
-\indexentry{Time series data|hyperpage}{23}
-\indexentry{Stratigraphic data|hyperpage}{23}
-\indexentry{Visualisation settings|hyperpage}{25}
-\indexentry{Superelevation|hyperpage}{25}
-\indexentry{Changing Colour|hyperpage}{26}
-\indexentry{Changing scalar values|hyperpage}{26}
-\indexentry{Edges|hyperpage}{26}
-\indexentry{Opacity|hyperpage}{26}
-\indexentry{Transparency|hyperpage}{26}
-\indexentry{Scaling|hyperpage}{27}
-\indexentry{Translation|hyperpage}{27}
-\indexentry{Zoom|hyperpage}{27}
-\indexentry{Bounding Box|hyperpage}{27}
-\indexentry{Projection|hyperpage}{27}
-\indexentry{Orthographic Projection|hyperpage}{27}
-\indexentry{Perspective Projection|hyperpage}{27}
-\indexentry{Colour lookup tables|hyperpage}{27}
-\indexentry{VTK export|hyperpage}{28}
-\indexentry{OpenSG export|hyperpage}{28}
-\indexentry{Adding filters|hyperpage}{28}
-\indexentry{Filter|hyperpage}{28}
-\indexentry{Textures|hyperpage}{29}
-\indexentry{Threshold filter|hyperpage}{31}
-\indexentry{Contour filter|hyperpage}{31}
-\indexentry{Tube filter|hyperpage}{32}
-\indexentry{Sphere filter|hyperpage}{32}
-\indexentry{Glyph Filter|hyperpage}{32}
-\indexentry{Surface filter|hyperpage}{33}
+\indexentry{Manipulating geometrical data|hyperpage}{19}
+\indexentry{Setting names|hyperpage}{19}
+\indexentry{Changing names|hyperpage}{19}
+\indexentry{Connecting polylines|hyperpage}{19}
+\indexentry{Creating polygons from polylines|hyperpage}{20}
+\indexentry{Creating surfaces from polygons|hyperpage}{20}
+\indexentry{Creating meshes|hyperpage}{20}
+\indexentry{Adaptive meshes|hyperpage}{20}
+\indexentry{Element size|hyperpage}{21}
+\indexentry{Homogeneous meshes|hyperpage}{21}
+\indexentry{Creating meshes|hyperpage}{22}
+\indexentry{Extruding meshes|hyperpage}{23}
+\indexentry{Mapping meshes|hyperpage}{24}
+\indexentry{Mesh quality|hyperpage}{24}
+\indexentry{Creating processes|hyperpage}{26}
+\indexentry{Creating FEM conditions|hyperpage}{26}
+\indexentry{Creating boundary conditions|hyperpage}{26}
+\indexentry{Changing FEM conditions|hyperpage}{28}
+\indexentry{Time series data|hyperpage}{28}
+\indexentry{Stratigraphic data|hyperpage}{28}
+\indexentry{Visualisation settings|hyperpage}{29}
+\indexentry{Superelevation|hyperpage}{29}
+\indexentry{Changing Colour|hyperpage}{30}
+\indexentry{Changing scalar values|hyperpage}{30}
+\indexentry{Edges|hyperpage}{30}
+\indexentry{Opacity|hyperpage}{30}
+\indexentry{Transparency|hyperpage}{30}
+\indexentry{Scaling|hyperpage}{31}
+\indexentry{Translation|hyperpage}{31}
+\indexentry{Zoom|hyperpage}{31}
+\indexentry{Bounding Box|hyperpage}{31}
+\indexentry{Projection|hyperpage}{31}
+\indexentry{Orthographic Projection|hyperpage}{31}
+\indexentry{Perspective Projection|hyperpage}{31}
+\indexentry{Colour lookup tables|hyperpage}{31}
+\indexentry{ParaView|hyperpage}{31}
+\indexentry{VTK export|hyperpage}{32}
+\indexentry{OpenSG export|hyperpage}{32}
+\indexentry{Adding filters|hyperpage}{32}
+\indexentry{Filter|hyperpage}{32}
+\indexentry{Colour lookup tables|hyperpage}{33}
+\indexentry{Textures|hyperpage}{34}
+\indexentry{Raster files|hyperpage}{34}
+\indexentry{Raster files|hyperpage}{34}
+\indexentry{NetCDF files|hyperpage}{34}
+\indexentry{Threshold filter|hyperpage}{35}
+\indexentry{Contour filter|hyperpage}{36}
+\indexentry{Tube filter|hyperpage}{36}
+\indexentry{Sphere filter|hyperpage}{37}
+\indexentry{Glyph Filter|hyperpage}{37}
+\indexentry{Surface filter|hyperpage}{37}

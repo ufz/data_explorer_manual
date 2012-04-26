@@ -3,13 +3,15 @@
 \section{Visualisation Properties}
 \index{Visualisation settings}
 
-You can change some properties of the render window by clicking \cmd{Settings\ra} \cmd{Visualisation Settings...}. The dialog that opens allows you to change the background colour of the render window as well as some small changes concerning the illumination of the scene.
+You can change some properties of the render window by clicking \cmd{Settings\ra} \cmd{Visualisation Settings...}. The dialogue that opens allows you to change the background colour of the render window as well as some small changes concerning the illumination of the scene.
 
 For any rendered scene a light source has to be specified (basically the equivalent to the sun or a lamp in the room). Per default this light source is identical with the viewer, i.e. the light source always illuminated the part of an object in the render window that can be seen by the user. In some cases this illumination is not enough, though, and certain parts of a rendered object may be shrouded in darkness. Therefore it is possible to switch on additional light sources above and below the object to ensure a full illumination of the scene.
 
 A global superelevation\index{Superelevation} factor can be applied to all root objects in the visualisation pipeline. This overwrites all previously set superelevation factors. This is especially useful when dealing with a large number of files, all of which should be assigned the same superelevation factor (e.g. when using \ogs projects, see section \ref{nativefileformats}).
 
 Per default on loading new data the 3D view is adapted to show the entire scene. This can be switched of by unchecking the ``Reset view on load'' option. This might be useful when making a series of screenshots with the exact same point of view.
+
+Finally, it is possible to switch on backface culling. This will result in rendering only triangles with normals directed towards the observer. It is as such a useful tool to check if all normals are set correctly on data sets. 
 
 \section{General Visualisation Options}
 \label{genvisoptions}
@@ -22,7 +24,7 @@ For each object in the visualisation pipeline there a number of parameters that 
 \subfloat[Default colour table]{\includegraphics[width=0.3\linewidth]{colour-default}\label{colour-default}}\enspace
 \subfloat[User-defined colours]{\includegraphics[width=0.3\linewidth]{colour-user}\label{colour-user}}
 \end{center}
-\caption{Each object is assigned a random solid colour as well as a default colour table based on a temperature scale (from blue to red). The solid colour can be adjusted via the ``Diffuse Color''-option (see section \ref{genvisoptions}), the colour table can be adjusted by loading a user-defined *.lut file via the ``Add color table...''-option (see section \ref{specvisoptions}).} \label{fig:colours}
+\caption{Each object is assigned a random solid colour as well as a default colour table based on a temperature scale (from blue to red). The solid colour can be adjusted via the ``Diffuse Color''-option (see section \ref{genvisoptions}), the colour table can be adjusted by loading a user-defined *.xml file via the ``Add color table...''-option (see section \ref{specvisoptions}).} \label{fig:colours}
 \end{figure}
 
 In detail these parameters are:
@@ -53,12 +55,12 @@ There are a number of options that are available only for certain types of data.
 
 \begin{itemize}
 \item \textbf{Add filter...:} Allows to apply a filter to the current objects. For details on that option see section \ref{filters}.
-\item \textbf{Add color table...:}\index{Colour lookup tables} Allows you to assign a specific colour table to the currently selected scalar array. The colour table is loaded from a *.lut-file (see figure \ref{colour-user}).\\
-    This option is available for all objects except image data.
+\item \textbf{Add color table...:}\index{Colour lookup tables} Allows you to assign a specific colour table to the currently selected scalar array (see figure \ref{colour-user}). The colour table is loaded from a *.xml-file and has the same format as ParaView\footnote{ParaView is an open-source data analysis and visualisation application for VTK data. It can be downloaded at \url{http://www.paraview.org/}}.\index{ParaView}\\
+    This option is available for all objects, although for image data it is not available via right-click but needs to be called as a filter (see section \ref{filters}) lookup tables and can therefore be created or edited using this software.
 \item \textbf{Convert to Mesh...:} Allows to convert an object of the VTK-data type ``Unstructured Grid'' to be converted into an \ogs mesh. Objects of that type are basically meshes that are contained in different data structure than ``normal'' \ogs meshes. Therefore, this specifically allows the conversion of imported VTK-files to \ogs meshes.\\
     This option is available for all objects of type ``VTK\_UN\-STRUCT\-URED\_GRID'' (i.e. all mesh objects).
 \item \textbf{Convert Image to Mesh...:} Generates an \ogs mesh based on a given raster file. See figure \ref{Filter-Img4}. For more information, see section \ref{meshraster}. This options is only available for image data (i.e. raster files).
-\item \textbf{Export to VTK:}\index{VTK export} All objects displayed the render window are technically VTK-objects. Choosing this option saves these objects in VTK-format to a file. They can then be used in any software supporting this format (e.g. Paraview\footnote{http://www.paraview.org/}).
+\item \textbf{Export to VTK:}\index{VTK export} All objects displayed the render window are technically VTK-objects. Choosing this option saves these objects in VTK-format to a file. They can then be used in any software supporting this format (e.g. Paraview).
 \item \textbf{Export to OpenSG:}\index{OpenSG export} Converts objects into OpenSG format (*.osg). This is another open source graphics format. It is also the format used by the UFZ VisLab. Specifically, this also implies that \emph{anything} that can be visualised in \ogs can also be exported to OpenSG and be presented in the VisLab.
 \end{itemize}
 
@@ -67,7 +69,7 @@ There are a number of options that are available only for certain types of data.
 
 In contrast to the options detailed in the previous section, filters are a manipulation of the actual graphics object to enhance, reduce or deform certain aspects of these objects for imparting information that might not be superficial\footnote{One might argue that this definition also holds true for the assignment of specific color tables which is accessed via right-click on an object. This inconsistency originates in the data structures the objects are stored in and in defining an easy-to-use workflow for using this functionality.}.
 
-To apply a filter, right-click on an object in the visualisation pipeline and select \cmd{Add filter...}.\index{Adding filters}\index{Filter} A dialog will pop up which lets you select one of a number of available filters. As before, filters will only be displayed for objects they can be applied to. However, this does not mean that it makes sense to apply any filter to any object where it can be applied. Also note, that it is possible (and sometimes useful) to apply filters to filters to extract certain information bit by bit.
+To apply a filter, right-click on an object in the visualisation pipeline and select \cmd{Add filter...}.\index{Adding filters}\index{Filter} A dialogue will pop up which lets you select one of a number of available filters. As before, filters will only be displayed for objects they can be applied to. However, this does not mean that it makes sense to apply any filter to any object where it can be applied. Also note, that it is possible (and sometimes useful) to apply filters to filters to extract certain information bit by bit.
 %
 \begin{figure}[tb]
 \begin{center}
@@ -83,8 +85,9 @@ All available filters will be detailed in the following.
 
 \subsubsection{Apply lookup table to image}
 \bstart{Applicable to:} Image Data
+\index{Colour lookup tables}
 
-\bstart{Effect:} Applies default color table to images, replacing grey values with a temperature scale (i.e. dark colours are blue, light colours are red). This results in an image where certain gradients are much better discernable. See figure \ref{Filter-Img2}.
+\bstart{Effect:} Applies a color table to images. The color table can be loaded from a *.xml-file. If no file is specified, a default color table is automatically generated, replacing grey values with a temperature scale (i.e. dark colours are blue, light colours are red). This results in an image where certain gradients are much better discernable. See figure \ref{Filter-Img2}.
 
 \bstart{Remarks:} \emph{This is similar to applying a pre-defined colour table to a geometry- or mesh object. The implementation as a filter for images is based on the very different structure of image objects in the graphics library VTK which is used for visualisation.}
 
@@ -99,10 +102,10 @@ All available filters will be detailed in the following.
 \end{figure}
 
 \subsubsection{Apply texture to surface}
-\index{Textures}
+\index{Textures}\index{Raster files}\index{Raster files}\index{NetCDF files}
 \bstart{Applicable to:} Surfaces, Meshes
 
-\bstart{Effect:} Allows to map an image/raster on a surface or mesh. This might be additional information such as land use classes, precipitation, etc. See figure \ref{Filter-Mesh4}.
+\bstart{Effect:} Allows to map an image/raster on a surface or mesh. This might be additional information such as land use classes, precipitation, etc. Possible formats for loading textures include all supported raster formats as well as netCDF files (see \ref{Import File Formats}). An example is shown in figure \ref{Filter-Mesh4}.
 
 \subsubsection{Elevation-based colouring}
 \bstart{Applicable to:} Geometry, Meshes
