@@ -1,6 +1,6 @@
 \chapter{Introduction}
 
-This manual has been written to give an overview over the functionality of the \ogs Data Explorer. Existing functionality is explained and typical workflows are detailed step by step.
+This manual has been written to give a quick overview over the functionality of the \ogs Data Explorer. Existing functionality is explained and typical workflows are detailed step by step.
 
 \bigskip
 
@@ -12,7 +12,7 @@ However, it is important to keep in mind that the \ogs Data Explorer is \emph{no
 
 This manual will give you an overview of the features of the programme, how things work and what possible problems you might encounter. For more information on \ogs itself check out the OGS-Wiki\footnote{https://svn.ufz.de/ogs}.\index{OGS Wiki}
 
-It is also highly recommended to always use the latest version which is always available on the Jenkins \index{Jenkins Build Server} Buildserver\footnote{https://svn.ufz.de/hudson}\footnote{http://jenkins-ci.org/}.
+It is also highly recommended to always use the latest version of \ogs which is available on the Jenkins\footnote{http://jenkins-ci.org/} Build Server\footnote{https://svn.ufz.de/jenkins/}\index{Jenkins Build Server}.
 
 \subsection*{Important concepts}
 
@@ -24,13 +24,13 @@ It is also highly recommended to always use the latest version which is always a
 \end{center}
 \end{figure}
 
-In the following a number of terms will appear over and over again and it is important to know what they mean, to be able to follow the instructions.
+Within this manual a number of terms will appear over and over and it is important to know what they mean, to be able to follow the instructions.
 
-Figure \ref{fig:gui} shows a screenshot of the GUI of the \ogs Data Explorer. The three most important parts of the user interface are marked as ``Data View'', ``Render Window'' and ``Visualisation Pipeline''. These elements and the information they contained are explained in detail in section \ref{datavisualisation} and the names will pop up again and again in this manual so it is important that you know what is meant if you read the names.
+Figure \ref{fig:gui} shows a screenshot of the GUI of the \ogs Data Explorer. The three basic parts of the user interface are marked as ``Data View'', ``Render Window'' and ``Visualisation Pipeline''. These elements and the information they contain are explained in detail in section \ref{datavisualisation} and these names will pop up again and again in this manual so it is important to recognise which parts of the graphical user interface they specify. Additional windows might pop up from time to time for data that is not suitable for 3D visualisation, such as time series sensor data or borehole stratigraphies. 
 
-\ogs is a tool that is written in a programming language called C++. As many other programming language it allows the developer to add so called libraries that define a certain set of functionality. This means a programmer does not need to implement every function provided by a programme himself but this function is instead provided by the library and can be used by anyone linking to that library. The Data Explorer makes use of a number of such libraries. The two most important ones are called Qt\footnote{http://qt.nokia.com} and VTK\footnote{http://www.vtk.org}.
+\ogs is written in the C++ programming language. As many other programming languages it allows the developer to add so called libraries that define a certain set of functionality. This means a programmer does not need to implement every function provided by a programme himself but instead can depend on functionality provided by the library. The Data Explorer makes use of a number of such libraries. The two most important ones are called Qt\footnote{http://qt.nokia.com} and VTK\footnote{http://www.vtk.org}. 
 
 Qt\index{Qt} is a library mainly providing functionality for a user interface, i.e. the definition of windows, dialogues and everything you expect to see in there, such as buttons, lists, menus, etc. Qt offers a lot more than that but explaining it all would go beyond the scope of this manual. Elements of the Data Explorer that make use of Qt are for instance the ``Data View'' or the windows displaying diagrams or borehole stratigraphies.
 
-VTK\index{VTK} (Visualisation Toolkit) is a graphics library which can be used for the visualisation of objects in 3D. It can also save these 3D objects in files, which in turn are called VTK-files and can also be used by the Data Explorer. The ``Render Window'' and anything that is displayed there has been constructed using VTK.
+VTK\index{VTK} (``\textbf{V}isualisation \textbf{T}ool\textbf{k}it'') is a graphics library which can be employed for the visualisation of objects in 3D. It also includes functionality to read and write these 3D objects from and to files. These ``VTK-files'' and can also be used by the Data Explorer but also by any other programme supporting VTK, such as ParaView\footnote{http://www.paraview.org}\index{ParaView} or OpenFOAM\footnote{http://www.openfoam.com}\index{OpenFOAM}. The ``Render Window'' of the Data Explorer and anything that is displayed within has been constructed using VTK.
 
