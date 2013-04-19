@@ -7,30 +7,51 @@ There is a small number of function to manipulate geometric data in \ogs. The co
 
 However, it is possible to set or change names for any geometrical object by right-clicking on the object and selecting \cmd{Set name...}\index{Setting names}\index{Changing names}. Upon saving the data again, the new or modified names will be saved in the corresponding file.
 
-Functions for the actual manipulation of geometric data that \emph{are} implemented are all associated with polylines and can be applied by right-clicking the ``Polylines'' item of any geometry and selecting \cmd{Connect Polylines...}.
+\subsubsection{Removing Duplicate Points}
+\index{Removing geometric points}
+
+Upon loading geometric data, the programme will check if any two geometric points are identical or \emph{almost} identical (within a small $\varepsilon$-range) and remove these points. GIS software often produces feature files that contain duplicate points which is not a problem within GIS but leads to all kinds of problems during tessellation of polygons or volumes as well as during a subsequent FEM simulation.
+
+While the software will remove these duplicate points everytime a specific data set is loaded, it makes sense to save the cleaned data set and thus save loading time later on and be sure to work with a more suitable data set.
+
+\bigskip
+ 
+All other functions for manipulating geometry are associated with polylines and can be applied by right-clicking the ``Polylines'' item of any geometry in the Data View and then selecting \cmd{Connect Polylines...}.
 
 \subsubsection{Connecting Polylines}
 \index{Connecting polylines}
-This function connects all the selected polylines to a single new polyline provided that the start- and end points of all segments are within the given maximum distance. The default maximum distance is $0.0$, meaning that start- and end points have to be identical.
+This function connects all the selected polylines to a single new polyline provided that the start- and end points of all segments are within the given maximum distance. The default maximum distance is $0.0$, meaning that start- and end points have to be identical. A name may be added to the resulting new polyline.
 
-Note that if more than two start/end points are located within the given maximum distance, still only two of those points are connected. These points are chosen randomly.
+Note that if more than two start/end points are located within the given maximum distance, still only two of those points are connected. These points are chosen randomly. It is not advised to use a maximum distance that may lead to ambiguous results.
+
+The newly created polyline is added to the geometry. All the polylines that are parts of this new line are still kept within the geometry.
 
 \subsubsection{Creating Polygons by Closing Polylines}
 \index{Creating polygons from polylines}
-This function closes a (connected) polyline. Simply check `Close connected Polyline'. If a name has been entered, this name will be assigned to the closed polyline.
+This function closes a (connected) polyline. Simply check `Close connected Polyline'. Again, if a name has been entered, this name will be assigned to the closed polyline.
 
 \subsubsection{Creating Surfaces by Triangulating Polygons}
 \index{Creating surfaces from polygons}
-This function additionally creates a new surface by triangulating the polygon. This simply requires checking `Create Surface from Polyline'. The newly created polyline has to be closed for that function to work. If a name has been entered, this name will be assigned to the surface.
+This function additionally creates a new surface by triangulating the newly created polygon. This simply requires checking `Create Surface from Polyline'. The newly created polyline has to be closed for that function to work. If a name has been entered, this name will be assigned to the surface.
 
-\section{Creating Meshes from Geometry}
+
+\section{Time Series and Stratigraphic Data to Observation Sites}
+\index{Time series data}\index{Stratigraphic data}
+
+For observation sites within the ``Stations'' Data View it is possible to display additional information such as logger data at the site or the stratigraphy at a borehole.
+
+To view the additional information of an observation site load a stn-file into the programme and right-click on any observation site in the data view. You will see either the menu entry ``View Stratigraphy...'' for a borehole or ``View Diagram...'' for a station. While a borehole will always have strategraphic data (at least one layer over its whole length), not all stations will have time series data attached (this needs to be specified in the input file). If such data exists, a dialogue will open which allows to set a few parameters: A start and end date are set based on the data in the attached time series file for this station. This date can be changed to only display a subset of the data. There are also checkboxes for all all time series contained in the file which allow to specifically select only the time series the user wants to see. Upon pressing OK a new window will open, displaying the requested information.
+
+\section{Generating and Manipulating Meshes}
+
+\subsection{Creating Meshes from Geometry}
 \label{meshcreation}\index{Creating meshes}
 
 By selecting \cmd{Tools\ra Mesh Generation...} a dialogue that allows the user to create meshes using information currently present in the programme. For this to work, the open-source mesh generating software GMSH\footnote{http://geuz.org/gmsh/} needs to be installed and be available from the location of the Data Explorer (i.e. located in the same directory or findable, e.g. via PATH-variable under MS Windows).
 
-The user can select any geometry and observation sites that should be considered for generating the mesh. Note that all points of every data set considered for mesh generation will be included as nodes in the final mesh. Therefore it makes sense to check if succeeding points of polylines are unnecessarily close together or too far apart. It is furthermore necessary that at least on polyline in any of the selected geometries is closed (i.e. is a polygon). Any polygons found in the geometry will be meshed, polygons within polygons will simply be integrated within the encompassing larger shape.
+The user can select any geometry and observation sites that should be considered for generating the mesh. It is necessary that at least on polyline in any of the selected geometries is closed (i.e. is a polygon) and will serve as an outer boundary to the resulting mesh. Any further polygons found in the geometry will be meshed, polygons within polygons will simply be integrated within the encompassing larger shape. Note that all points of every data set considered for mesh generation and located within the outer boundary will be included as nodes in the final mesh. Therefore it makes sense to check if consecutive points of polylines are unnecessarily close together or too far apart.
 
-Upon pressing \cmd{OK} a geometry-file (*.geo) for GMSH is written, GMSH is called to create the mesh and the newly created mesh is at once imported in the \ogs-Data Explorer.
+Upon pressing \cmd{OK} a geometry-file (*.geo) for GMSH is written, GMSH is called to create the mesh and the newly created mesh is at once imported in the \ogs-Data Explorer. If not specified otherwise, the geo-file will be deleted again after the mesh has been created.
 
 There is an \cmd{Advanced}-Tab in this dialogue that allows to set a number of parameters for the mesh. Most importantly, it can be chosen, if the new mesh should be adaptive or homogeneous. An adaptive mesh{Adaptive Meshes} is refined towards points or lines specified in the geometry while a homogeneous mesh has elements of roughly the same size everywhere in the domain (see figure \ref{fig:meshing}).
 
@@ -46,8 +67,8 @@ There is an \cmd{Advanced}-Tab in this dialogue that allows to set a number of p
 The specific parameters for adaptive meshes are:
 \index{Adaptive meshes}
 \begin{itemize}
-\item \textbf{Max. number of points in Quadtree leaf:} Generally speaking, the smaller this number the finer will the resulting mesh be. \\
-    To be more exact, you have to have a basic idea what a quad tree \footnote{http://en.wikipedia.org/wiki/Quadtree} is: A tree structure is constructed by a sequential subdivision of the domain based on the distribution of relevant points in space. The criterium if a segment compromising a leaf is further refined is dependent on the number of points located within that segment. Therefore, larger numbers of that parameters will usually result in coarser meshes while smaller numbers will result in finer meshes. \emph{Note that this is technically not a correct explanation as results are heavily dependent on how many points are located in certain sub-divisions of the domain, the existence of point clusters, etc.} See figure \ref{fig:quadtree} for an example.
+\item \textbf{Max. number of points in Quadtree leaf:} Generally speaking, the smaller this number the more refined the resulting mesh will be. \\
+    To give a more detailed explanation, basic knowledge about \emph{quad tree} data structures \footnote{http://en.wikipedia.org/wiki/Quadtree} is necessary: A tree structure is constructed by a sequential subdivision of the domain based on the distribution of relevant points in space. The criterium if a segment compromising a leaf is further refined is dependent on the number of points located within that segment. The size of the parameter relates to the maximum allowed size of mesh elements and additional points (\emph{Steiner points}) will be added to the data set to ensure the a certain refinement is guaranteed anywhere within the domain. Therefore, larger numbers of that parameters will usually result in coarser meshes while smaller numbers will result in finer meshes. \emph{Note that this is technically not a correct explanation as results are heavily dependent on how many points are located in certain sub-divisions of the domain, the existence of point clusters, etc.} See figure \ref{fig:quadtree} for an example.
 \item \textbf{Mesh density scaling for points:} This is a scaling factor for the above parameter allowing for a refinement towards points located within the outer boundary. Again, smaller values will result in finer meshes.
 \item \textbf{Mesh density scaling for stations:} This is exactly the same kind of scaling factor as for the option above, only for refinement towards observation sites, allowing a different mesh density for different regions of the mesh.
 \end{itemize}
@@ -56,16 +77,16 @@ The specific parameters for adaptive meshes are:
 \begin{center}
 \includegraphics[width=0.95\linewidth]{quadtree}\label{quadtree}
 \end{center}
-\caption{Adaptive meshing of geometry. The left colomn depicts polyline and points that need to be meshed. In the middle the resulting quad trees can be seen, the upper on generated with a maximum of two points per leaf, the lower one with 10 points per leaf. The resulting meshes are shown on the right side. Notice that regions where no information is available have roughly the same element size while elements where point information is given differ vastly in element size.} \label{fig:quadtree}
+\caption{Adaptive meshing of geometry. The left column depicts polyline and points that need to be meshed. In the middle the resulting quad trees can be seen, the upper on generated with a maximum of two points per leaf, the lower one with 10 points per leaf. The resulting meshes are shown on the right side. Notice that regions where no information is available have roughly the same element size while elements where point information is given differ vastly in element size.} \label{fig:quadtree}
 \end{figure}
 
 Likewise, you can select an \textbf{element size}\index{Element size} for homogeneous meshes.\index{Homogeneous meshes} Here, too, a smaller number will result in a finer mesh, as the value specifies the maximum edge length of mesh elements.
 
 \bigskip
 
-Default parameters for all options are already predefined and have worked well with most examples that have been tested. Feel free to play around with these numbers but realise that the resulting mesh might not be what you have in mind.
+Default parameters for all options are already predefined and have worked well with most examples that have been tested. However, results are heavily dependent an the bounding box of all data sets used for mesh generation. Often it is necessary to play around with these numbers a bit. Usually it makes sense to start with larger parameters that result in coarser meshes to get a rough idea what the final mesh will look like and where potential problems may be located.
 
-\section{Creating Meshes from Raster Files}
+\subsection{Creating Meshes from Raster Files}
 \label{meshraster}\index{Creating meshes}
 
 \begin{figure}[tb]
@@ -78,23 +99,30 @@ Default parameters for all options are already predefined and have worked well w
 \label{fig:rastermesh}
 \end{figure}
 
-A completely different way to create a mesh is based on image or raster files, such as *.asc-files from ArcGIS. If the file is loading into the Data Explorer it will appear in the visualisation pipeline only. Right clicking the object allows to select the menu item \cmd{Convert Image to Mesh...}. A dialogue allows the parameterise how exactly this conversion should be performed. Specifically, it is possible to select a mesh element type for representation of pixels and a way in which grey-values should be interpreted\footnote{Meshes can also be generated from colour images. However, the colours will be converted to grey-values via $g = 0.3*\text{red}+0.6*\text{green}+0.1*\text{blue}$.}.
+A completely different way to create a mesh is based on image or raster files, such as *.asc-files from ArcGIS. If the file is loading into the Data Explorer it will appear in the Visualisation Pipeline only. Right clicking the pipeline item allows to select the menu item \cmd{Convert Image to Mesh...}. A dialogue allows the parameterise how exactly this conversion should be performed. Specifically, it is possible to select a mesh element type for representation of pixels and a way in which grey-values should be interpreted\footnote{Meshes can also be generated from colour images. However, the colours will be converted to grey-values via $g = 0.3*\text{red}+0.6*\text{green}+0.1*\text{blue}$.}.
 
 For the first parameter, pixels can be converted into a square (i.e. a quadrilateral element) or two rectilinear triangles (i.e. two triangle elements). In the future it is also planned to offer cubes (i.e. a hexahedron) for multi-layered images.
 
-For the second parameter the user can decide pixel values should be interpreted as elevation (which is useful if the raster represents a digital elevation model) or if the grey-values should be assigned as scalar values to the mesh elements. As an alternative, these values can also be ignored (see Fig. \ref{fig:rastermesh} for examples).
+For the second parameter the user can decide wether pixel values should be interpreted as elevation (which is useful if the raster represents a digital elevation model) or if the grey-values should be assigned as scalar values to the mesh elements. As a third alternative, these values can also be completely ignored (see Fig. \ref{fig:rastermesh} for examples).
 
-If the raster file contains ``NoData''-values (this is common in raster files created with a Geographic Information Systems such as ArcGIS), these values are ignored and will after the conversion not appear as mesh-elements (i.e. despite the raster file always being rectilinear the resulting mesh may have an arbitrary boundary defined be pixels actually containing information).
+If the raster file contains ``NoData''-values (this is common in raster files created with a Geographic Information Systems such as ArcGIS), these values are ignored and will not appear as mesh-elements after the conversion  (i.e. despite the raster file always being rectilinear the resulting mesh may have an arbitrary boundary defined be pixels actually containing information).
 
-\section{Extruding Meshes to 3D}
+\subsection{Removing Duplicate or Unused Mesh Nodes}
+\index{Removing mesh nodes}
+
+As with loading geometric data, certain checks are performed when loading meshes. The programme will automatically removed mesh nodes that are not part of any mesh element. Also, it is possible to remove duplicate mesh nodes, i.e. nodes that are located at the exact or almost exact same position as other nodes. The results for meshes are a bit more complicated as for geometries and this might require a restructuring or subdivision of mesh elements (i.e. if one node is removed from a prism-element, restructuring will result in two tetrahedra).
+
+\subsection{Extruding Meshes to 3D}
 \index{Extruding meshes}
 
-Any 2D mesh loaded into \ogs can be extruded into a 3D mesh by copying the 2D mesh layer a specified number of times and then connected any two neighbouring layers by creating 3D elements from all corresponding 2D elements (i.e. two triangles are connected and form one prism-elements, two quadrilateral elements form one hexahedron). This functionality can be accessed by right-clicking on a mesh in the data view and selecting \cmd{Edit Mesh...}. In the \cmd{3D Extrusion}-tab of the resulting dialogue the number of mesh layers and the distance between neighbouring layers can be specified.
+Any 2D mesh loaded into \ogs can be extruded into a 3D mesh by copying the 2D mesh layer a specified number of times and then connected any two neighbouring layers by creating 3D elements from all corresponding 2D elements (i.e. two triangles are connected and form one prism-elements, two quadrilateral elements form one hexahedron). This functionality can be accessed by right-clicking on a 2D mesh in the data view and selecting \cmd{Edit Mesh...}. The dialogue that now opens handles adding of such layers as well as mapping the elevation of mesh nodes.
 
-\section{Mapping of Meshes based on DEMs}
+\subsection{Mapping of Meshes based on DEMs}
 \index{Mapping meshes}
 
-For assigning elevation profiles to each layer, select the \cmd{Layer Mapping}-tab. Here, for each layer of the mesh a raster file in *.asc format can be selected and will be assigned to the respective mesh layer. Note that not for every layer a DEM file need to be specified. If no file path is given the mapping of the layer is simply skipped.
+For assigning elevation profiles to each layer, first the number of layers that should be added need to be specified. A ``layer'' in the sense of the underlying simulation algorithms, consists of 3D elements. Therefore a 3D mesh technically consists of $0$ layers and if such a 2D mesh needs to be mapped, it is therefore necessary to specify the number of layers as $0$. Likewise, one layer will require (at least) two digital elevation models (DEM) to be specified, one for the top-face of the elements and one for the bottom-face. 
+
+In general, $n+1$ raster files in *.asc format need to be specified for mapping $n$ mesh layers. The dialogue also allows to select one additional DEM-file called ``Surface''. If a 2D mesh should be mapped, this is the only file that needs to be specified, for a 3D mesh it is optional and serves a different purpose: The raster files given for the mapping usually represent the boundaries between subsurface layers (e.g. Statigraphic layers, aquifers, etc.). These are often interpolated from borehole information (e.g. using the kriging algorithm). This may result in an upper boundary of the subsurface model that is located above the actual surface of the model region. For multi-layered meshes the mapping will first be performed on all subsurface layers and the resulting mesh will then be intersected with the optional Surface DEM (i.e. the digital terrain model), thus effectively cutting away all elements located above surface. \emph{Note that currently the check if two layers are intersecting each other does \emph{not} work correctly for any other layers except the DEM!}
 
 \begin{figure}[tb]
 \begin{center}
@@ -106,15 +134,13 @@ For assigning elevation profiles to each layer, select the \cmd{Layer Mapping}-t
 \label{fig:RasterMapping}
 \end{figure}
 
-For multi-layered meshes the mapping will first be performed on all subsurface layers and the resulting mesh will then be intersected with the DEM-layer (i.e. the digital terrain model), thus effectively cutting away all elements located above surface. \emph{Note that currently the check if two layers are intersecting each other does \emph{not} work correctly for any other layers except the DEM!}
-
-For meshes containing only 2D elements there is also an option ``Remove mesh nodes at NoData values''. Per default this option is switched off as it is dependent on the meshing if the result will be topologically correct.
+For meshes containing only 2D elements there is also an option ``Remove mesh nodes at NoData values''. Per default this option is switched off as the correctness of the result is depending on the element size in these NoData locations.
 
 
-\section{Analyse Mesh Quality}
+\subsection{Analyse Mesh Quality}
 \index{Mesh quality}
 
-You can visualise the quality of a given mesh by right-clicking on the mesh in the respective data view and selecting \cmd{Check Mesh Quality...}. This allows to choose between currently four implemented measurements for mesh element quality. The result of choosing any of these modes is a colour-codes overlay of the mesh where every element is assigned a quality in $[0,1]$. You can select this overlay in the visualisation pipeline and specify thresholds to select a certain range of quality and see which element fall into that range. \emph{(Note: You might need to manually set the correct scalar array for visualising mesh quality. The appropriate data can be chosen by selecting in ``C-Selection'' in the \cmd{Active Scalar} pull-down menu.}
+You can visualise the quality of a given mesh by right-clicking on the mesh in the respective Data View and selecting \cmd{Check Mesh Quality...}. This currently allows to choose between four implemented measurements for mesh element quality. The result of choosing any of these modes is a colour-codes overlay of the mesh where every element is assigned a quality in $[0,1]$. You can select this overlay in the visualisation pipeline and specify thresholds to select a certain range of quality and see which element fall into that range. \emph{(Note: You might need to manually set the correct scalar array for visualising mesh quality. The appropriate data can be chosen by selecting in ``C-Selection'' in the \cmd{Active Scalar} pull-down menu.}
 
 \begin{figure}[tb]
 \begin{center}
@@ -140,12 +166,23 @@ The currently implemented measures are the following:
 
 The quality measure best suited for a given mesh might depend on the process you want to simulate using this mesh. For instance, processes such as groundwater recharge consist mainly of layered flows, meaning that large differences between horizontal and vertical element surfaces might have no effect on a correct result. The simulation of mass transport processes explicitly requires a fine mesh resolution in vertical direction to ensure a stable solution.
 
-\section{Creating Processes}
+\subsection{Changing Material Groups}
+\index{Changing material groups}
+
+Each element in a mesh is assigned a non-negative integer that specifies a material group this element belongs to. These material groups can be arbitrarily assigned. For instance, a mesh containing only two groups could name these groups ``17'' and ``98'' or use some different, arbitrary IDs. By right-clicking on a mesh and selecting \cmd{Edit Material Groups...} it is possible the change the ID of one or more groups or to merge groups.
+
+The two basic options are ``Condense material groups to smallest possible range'' and ``Replace material group value''. The first option will rename all material groups such that the group with the smallest ID will be assigned $0$, the group with the second-smallest ID will be assigned $1$, and so on. In a mesh with $10$ different material groups the largest existing ID will be $9$ after processing the mesh.
+
+The second option allows to specifically rename the ID of any group from the current value $A$ to any new value $B$. If $B$ already exists, the programme will give a warning and ask the user if the renaming process should really be started, thus merging groups $A$ and $B$.
+
+\section{Modelling Data}
+
+\subsection{Creating Processes}
 \index{Creating processes}
 
-It is possible to add processes to the workflow in the Modelling-tab by pressing the \cmd{Add process...}-button. A dialogue will open that allows to select a process type and an associated primary variable. As of version 5.2.07 this has no effect except for boundary conditions being grouped under these processes and being removed upon removing the process (via right-click \cmd{Remove process}).
+It is possible to add processes to the workflow in the Modelling-tab by pressing the \cmd{Add process...}-button. A dialogue will open that allows to select a process type and an associated primary variable. As of version 5.2.07 this has no effect on output files except for boundary conditions being grouped under these processes and being removed upon removing the process (via right-click \cmd{Remove process}).
 
-\section{Creating FEM Conditions}
+\subsection{Creating FEM Conditions}
 \index{Creating FEM conditions}
 \index{Creating boundary conditions}
 
@@ -166,15 +203,8 @@ For polylines or surfaces it is also possible to assign the conditions not direc
 
 Once created, FEM conditions can be saved by right-clicking associated process in the ``Modelling'' tab and selecting \cmd{Save FEM conditions...}. The user can specify the file format (XML or ASCII) and the type of conditions that should be written (boundary conditions, initial conditions, source terms or all of them).
 
-\section{Changing FEM Conditions}
+\subsection{Changing FEM Conditions}
 \index{Changing FEM conditions}
 
 Conditions loaded into the \ogs Data Explorer can be edited simply by right-clicking the respective geometric object in the ``Modelling'' tab and selecting \cmd{Edit condition}. This will once again open the FEM Condition Setup Dialogue that is also used for creating conditions. For existing conditions the appropriate values will already have been selected and can now be changed. Changes in the corresponding files will only be written once the user actively saves these files again via \cmd{Save FEM Conditions...}
-
-\section{Time series data and stratigraphic data}
-\index{Time series data}\index{Stratigraphic data}
-
-For observation sites it is possible to display additional information such as logger data at the site or the stratigraphy at a borehole. Both features are currently only implemented as a proof of concept and need to be expanded in the future.
-
-To view the additional information of an observation site load a stn-file into the programm and right-click on any observation site in the data view. You will see either the menu entry ``View Stratigraphy...'' for a borehole or ``View Diagram...'' for a station. If you selected to view a diagram, a dialogue will open which allows you to select a start and end date or to load a file that contains the data (if no associated data base entry for the station has been found). A new window will open, displaying the requested information.
 
