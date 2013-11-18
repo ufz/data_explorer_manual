@@ -15,7 +15,7 @@ Upon loading geometric data, the programme will check if any two geometric point
 While the software will remove these duplicate points everytime a specific data set is loaded, it makes sense to save the cleaned data set and thus save loading time later on and be sure to work with a more suitable data set.
 
 \bigskip
- 
+
 All other functions for manipulating geometry are associated with polylines and can be applied by right-clicking the ``Polylines'' item of any geometry in the Data View and then selecting \cmd{Connect Polylines...}.
 
 \subsubsection{Connecting Polylines}
@@ -34,6 +34,34 @@ This function closes a (connected) polyline. Simply check `Close connected Polyl
 \index{Creating surfaces from polygons}
 This function additionally creates a new surface by triangulating the newly created polygon. This simply requires checking `Create Surface from Polyline'. The newly created polyline has to be closed for that function to work. If a name has been entered, this name will be assigned to the surface.
 
+\subsubsection{Merging geometries}
+\index{Merging geometries}
+
+Multiple geometry data sets can be merged to a single geometry by selecting \cmd{Tools\ra Mesh Generation...} from the menu. This will open a dialog showing all currently loaded geometries with the option select those data sets that should be merged. It is also possible to assign a name to the merged geometry.
+
+\begin{figure}[tb]
+  \centering
+  \subfloat[Mapping based on DEM]{\frame{\includegraphics[width=.26\linewidth]{schema-dem}}\label{fig:schema:dem}}\,
+  \subfloat[Mapping based on mesh]{\frame{\includegraphics[width=.3525\linewidth]{schema-mesh1}}\label{fig:schema:mesh}}\,
+  \subfloat[Additional geometric points]{\frame{\includegraphics[width=.3525\linewidth]{schema-mesh2}}\label{fig:schema:points}}
+  \caption{Schematic of mapping algorithms implemented in the \emph{OpenGeoSys Data Explorer}. \textbf{(a)}~Calculation of geometric point elevation based on weighted DEM pixels. \textbf{(b)}~Projection of points onto mesh surfaces via triangle line intersection. \textbf{(c)}~Inserting additional points into geometry at intersections of geometric lines with mesh element edges and nodes. Newly inserted points are marked in red.}
+  \label{fig:geomappingschema}
+\end{figure}
+
+\subsection{Mapping Geometry}
+\index{Mapping geometry}
+
+Right-clicking a geometry in the Data View and selecting \cmd{Map geometry...} allows to add elevation information to all points of the selected geometry based on another data set (see fig. \ref{fig:dlgmods}a). This ``source''-data set can be either a mesh file or a file containing a digital elevation model (usually a *.asc or *.grd file). Both options can be selected from the pull down menu ``Map on data set''. In addition, this menu allows to select any mesh already loaded into \ogs to avoid loading the data set a second time. When selecting a DEM, geometric point will be given the elevation of the pixel they fall on when projected into the $(x,y)$-plane (see fig. \ref{fig:schema:dem}).
+
+For a subsequent FEM-based simulation, it is usually better to map a geometric data set on the FEM mesh if the geometry will later be used for assigning boundary conditions. The mapping-dialogue offers two options for this case:
+
+\begin{enumerate}
+\item All geometric points $p_i \in P$ are mapped to the exact elevation of the mesh at the position of the point $p_i$ in the $(x,y)$-plane, i.e. to the point where a vertical line through $p_i$ intersects the mesh (see fig. \ref{fig:schema:mesh}).
+\item In addition to the previous method, additional points are added whenever polylines projected onto the $(x,y)$-plane intersect mesh nodes or edges that have also been projected onto the $(x,y)$-plane (see \ref{fig:schema:points}).
+\end{enumerate}
+
+The second method will often result in larger geometry data sets, but also in a much better mapping. If unsure which method to use, it makes sense to try both and select the subjectively best result afterwards.
+
 
 \section{Time Series and Stratigraphic Data to Observation Sites}
 \index{Time series data}\index{Stratigraphic data}
@@ -42,7 +70,9 @@ For observation sites within the ``Stations'' Data View it is possible to displa
 
 To view the additional information of an observation site load a stn-file into the programme and right-click on any observation site in the data view. You will see either the menu entry ``View Stratigraphy...'' for a borehole or ``View Diagram...'' for a station. While a borehole will always have strategraphic data (at least one layer over its whole length), not all stations will have time series data attached (this needs to be specified in the input file). If such data exists, a dialogue will open which allows to set a few parameters: A start and end date are set based on the data in the attached time series file for this station. This date can be changed to only display a subset of the data. There are also checkboxes for all all time series contained in the file which allow to specifically select only the time series the user wants to see. Upon pressing OK a new window will open, displaying the requested information.
 
-\section{Generating and Manipulating Meshes}
+\section{Generating and Modifying Meshes}
+
+This section summarises the various way meshes can be created or modified using OpenGeoSys. Often functionality will be limited to a certain type of meshes, i.e. 2D meshes or 3D meshes. Usually the mesh dimension is based on the dimension of the elements within that mesh. For example, a triangle-mesh is 2D, a tetrahedra-mesh is 3D. For mixed element meshes, we find the maximum dimension of all the elements contained in that mesh to determine the mesh dimension. For example, a mesh containing tetrahedra (3D) and triangles (2D) is a 3D mesh; a mesh containing quads (2D) and lines (1D) is a 2D mesh; etc.
 
 \subsection{Creating Meshes from Geometry}
 \label{meshcreation}\index{Creating meshes}
@@ -107,35 +137,43 @@ For the second parameter the user can decide wether pixel values should be inter
 
 If the raster file contains ``NoData''-values (this is common in raster files created with a Geographic Information Systems such as ArcGIS), these values are ignored and will not appear as mesh-elements after the conversion  (i.e. despite the raster file always being rectilinear the resulting mesh may have an arbitrary boundary defined be pixels actually containing information).
 
-\subsection{Removing Duplicate or Unused Mesh Nodes}
-\index{Removing mesh nodes}
+\subsection{Converting Meshes to Geometry}
+\index{Convert Mesh to geometry}
+\index{Mesh to geometry conversion}
 
-As with loading geometric data, certain checks are performed when loading meshes. The programme will automatically removed mesh nodes that are not part of any mesh element. Also, it is possible to remove duplicate mesh nodes, i.e. nodes that are located at the exact or almost exact same position as other nodes. The results for meshes are a bit more complicated as for geometries and this might require a restructuring or subdivision of mesh elements (i.e. if one node is removed from a prism-element, restructuring will result in two tetrahedra).
+A 2D mesh loaded into \ogs can be converted into a geometry data set by right-clicking the mesh and selecting \cmd{Convert to geometry}. This will copy mesh nodes to geometric points and the mesh itself to a triangulated surface. In the same way, a 2D mesh can be converted into an ESRI shape file (by selecting \cmd{Export to Shapefile...}). The resulting file will be of type SHPT\textunderscore POLYGON and each mesh element will be represented as a polygon within the shape file.
 
-\subsection{Extruding Meshes to 3D}
-\index{Extruding meshes}
+\subsection{Extracting the surface of a mesh}
 
-Any 2D mesh loaded into \ogs can be extruded into a 3D mesh by copying the 2D mesh layer a specified number of times and then connected any two neighbouring layers by creating 3D elements from all corresponding 2D elements (i.e. two triangles are connected and form one prism-elements, two quadrilateral elements form one hexahedron). This functionality can be accessed by right-clicking on a 2D mesh in the data view and selecting \cmd{Edit Mesh...}. The dialogue that now opens handles adding of such layers as well as mapping the elevation of mesh nodes.
+It is possible to extract the surface of a 3D mesh by right-clicking the mesh and selecting \cmd{Extract surface}. This will result in a 2D mesh of the surface elements of the 3D mesh, i.e. all elements visible when viewing the mesh from $z+$ direction.
+
+Topologically, the result will consisting of all faces of 3D mesh elements where the surface normal n satisfies $|n - \left[0, 0, 1\right]|<90\degree$. Note that for certain meshes the result might also contain elements not actually connected to the surface if these unconnected elements also satisfy the constraint given above (e.g. if the 3D mesh contained holes).
+
 
 \subsection{Mapping of Meshes based on DEMs}
 \index{Mapping meshes}
+\index{Adding mesh layers based on DEM}
 
-For assigning elevation profiles to each layer, first the number of layers that should be added need to be specified. A ``layer'' in the sense of the underlying simulation algorithms, consists of 3D elements. Therefore a 3D mesh technically consists of $0$ layers and if such a 2D mesh needs to be mapped, it is therefore necessary to specify the number of layers as $0$. Likewise, one layer will require (at least) two digital elevation models (DEM) to be specified, one for the top-face of the elements and one for the bottom-face. 
+For mapping a 2D mesh based on a DEM or for adding multiple layers based on elevation profiles, right-click the mesh and select \cmd{Edit mesh...}. The dialogue will require the number of layers to be mapped for this mesh. A ``layer'' in the sense of the underlying simulation algorithms, consists of 3D elements. Therefore a 2D mesh technically consists of $0$ layers. Subsequently, when mapping a 2D mesh, it is necessary to specify the number of layers as $0$ and use one DEM to actually map the layer. Likewise, one layer will require (at least) two digital elevation models (DEM) to be specified, one for the top-face of the elements and one for the bottom-face.
 
-In general, $n+1$ raster files in *.asc format need to be specified for mapping $n$ mesh layers. The dialogue also allows to select one additional DEM-file called ``Surface''. If a 2D mesh should be mapped, this is the only file that needs to be specified, for a 3D mesh it is optional and serves a different purpose: The raster files given for the mapping usually represent the boundaries between subsurface layers (e.g. Statigraphic layers, aquifers, etc.). These are often interpolated from borehole information (e.g. using the kriging algorithm). This may result in an upper boundary of the subsurface model that is located above the actual surface of the model region. For multi-layered meshes the mapping will first be performed on all subsurface layers and the resulting mesh will then be intersected with the optional Surface DEM (i.e. the digital terrain model), thus effectively cutting away all elements located above surface. \emph{Note that currently the check if two layers are intersecting each other does \emph{not} work correctly for any other layers except the DEM!}
+In general, $n+1$ raster files in *.asc format are required for mapping $n$ mesh layers. The dialogue also allows to select one additional DEM-file called ``Surface''. If a 2D mesh should be mapped, this is the only file that needs to be specified. For a 3D mesh it is optional and serves a different purpose: The raster files given for the mapping usually represent the boundaries between subsurface layers (e.g. Statigraphic layers, aquifers, etc.). These are often interpolated from borehole information (e.g. using the kriging algorithm). This may result in an upper boundary of the subsurface model that is located above the actual surface of the model region. For multi-layered meshes the mapping will first be performed on all subsurface layers and the resulting mesh will then be intersected with the optional Surface DEM (i.e. the digital terrain model), thus effectively cutting away all elements located above surface. \emph{Note that currently the check if two layers are intersecting each other does \emph{not} work correctly for any other layers except the DEM!}
 
 \begin{figure}[tb]
 \begin{center}
 \subfloat[Surface Mesh]{\includegraphics[width=0.3\linewidth]{AmmerSurface}\label{fig:AmmerSurface}}\enspace
-\subfloat[Subsurface Layers]{\includegraphics[width=0.3\linewidth]{AmmerSubsurface}\label{fig:AmmerSubsurface}}\enspace
-\subfloat[Final Mesh]{\includegraphics[width=0.3\linewidth]{AmmerFinal}\label{fig:AmmerFinal}}
+\subfloat[Fixed thickness]{\includegraphics[width=0.3\linewidth]{AmmerSubsurface}\label{fig:AmmerSubsurface}}\enspace
+\subfloat[Based on DEM]{\includegraphics[width=0.3\linewidth]{AmmerFinal}\label{fig:AmmerFinal}}
 \end{center}
-\caption{Mapping meshes based on raster files: A surface mesh is extruded and four layers are added. These subsurface layers are mapped according to elevation models. In a final step the subsurface model is intersected with the terrain model.}
+\caption{Mapping meshes based on raster files: \textbf{(a)} original surface mesh, \textbf{(b)} adding subsurface layers of fixed size, \textbf{(c)} adding subsurface layers based on elevation models. In a final step the subsurface model is intersected with the terrain model (i.e. the actual surface elevation).}
 \label{fig:RasterMapping}
 \end{figure}
 
 For meshes containing only 2D elements there is also an option ``Remove mesh nodes at NoData values''. Per default this option is switched off as the correctness of the result is depending on the element size in these NoData locations.
 
+\subsection{Adding Layers of Fixed Size}
+\index{Adding mesh layers of fixed size}
+
+Besides adding subsurface layers using DEM-profiles as described in the previous section, a 2D mesh can also be extruded into a 3D mesh by copying the 2D mesh layer a specified number of times and then connected any two neighbouring layers by creating 3D elements from all corresponding 2D elements (i.e. two triangles are connected and form one prism-elements, two quadrilateral elements form one hexahedron). This functionality can also be accessed by right-clicking on a 2D mesh in the data view and selecting \cmd{Edit Mesh...}. Again, specify the number of layers you would like to add and select \cmd{Add layers with static thickness}. After that the thickness of each layer needs to be specified.
 
 \subsection{Analyse Mesh Quality}
 \index{Mesh quality}
@@ -166,14 +204,33 @@ The currently implemented measures are the following:
 
 The quality measure best suited for a given mesh might depend on the process you want to simulate using this mesh. For instance, processes such as groundwater recharge consist mainly of layered flows, meaning that large differences between horizontal and vertical element surfaces might have no effect on a correct result. The simulation of mass transport processes explicitly requires a fine mesh resolution in vertical direction to ensure a stable solution.
 
+\begin{figure}[tb]
+\begin{center}
+\includegraphics[width=0.8\linewidth]{dlg_mods}
+\end{center}
+\caption{\ogs Data Explorer dialogs for modification of data sets: \textbf{(a)} Mapping geometry based on a mesh or DEM, \textbf{(b)} Changing the material groups of a mesh, \textbf{(c)} Remove elements from a mesh based on certain criteria.} \label{fig:dlgmods}
+\end{figure}
+
 \subsection{Changing Material Groups}
 \index{Changing material groups}
 
-Each element in a mesh is assigned a non-negative integer that specifies a material group this element belongs to. These material groups can be arbitrarily assigned. For instance, a mesh containing only two groups could name these groups ``17'' and ``98'' or use some different, arbitrary IDs. By right-clicking on a mesh and selecting \cmd{Edit Material Groups...} it is possible the change the ID of one or more groups or to merge groups.
+Each element in a mesh is assigned a non-negative integer that specifies a material group this element belongs to. These material groups can be arbitrarily assigned. For instance, a mesh containing only two groups could name these groups ``17'' and ``98'' or use some different, arbitrary IDs. By right-clicking on a mesh and selecting \cmd{Edit Material Groups...} it is possible the change the ID of one or more groups or to merge groups (see fig. \ref{fig:dlgmods}b).
 
 The two basic options are ``Condense material groups to smallest possible range'' and ``Replace material group value''. The first option will rename all material groups such that the group with the smallest ID will be assigned $0$, the group with the second-smallest ID will be assigned $1$, and so on. In a mesh with $10$ different material groups the largest existing ID will be $9$ after processing the mesh.
 
 The second option allows to specifically rename the ID of any group from the current value $A$ to any new value $B$. If $B$ already exists, the programme will give a warning and ask the user if the renaming process should really be started, thus merging groups $A$ and $B$.
+
+\subsection{Removing Duplicate or Unused Mesh Nodes}
+\index{Removing mesh nodes}
+
+As with loading geometric data, certain checks are performed when loading meshes. The programme will automatically removed mesh nodes that are not part of any mesh element. Also, it is possible to remove duplicate mesh nodes, i.e. nodes that are located at the exact or almost exact same position as other nodes. The results for meshes are a bit more complicated as for geometries and this might require a restructuring or subdivision of mesh elements (i.e. if one node is removed from a prism-element, restructuring will result in two tetrahedra).
+
+\subsection{Removing Mesh Elements}
+\index{Removing mesh elements}
+
+\ogs allows to remove mesh elements based on a number of criteria. A dialogue for selecting which elements to remove can by opened by selecting \cmd{Tools \ra Remove Mesh Elements...} (see fig. \ref{fig:dlgmods}c). It is necessary to specify the mesh from which elements need to be removed as well as the name of the resulting new mesh. Possible options based on which elements may be removed include element type, material group, bounding box as well as zero volume elements. The dialogue allows to select any combination of these constraints. An error message will be given if the selected criteria would result in removing either none or all of the elements in the selected mesh.
+
+
 
 \section{Modelling Data}
 

@@ -30,16 +30,16 @@
 
 \ogs has a large number of native file formats for storing geometrical data, meshes, processes, FEM conditions (such as boundary conditions) and material properties (e.g. fluid properties) and many more.
 
-Not all of them can be loaded into the user interface since not all of them contain data that can be visualised. Things are additionally made difficult as the file standards for the programm are currently changed from GeoSys4 legacy files in ASCII format to XML files\footnote{http://www.w3.org/XML/}. For this reason there exists -- at least at the time of this writing -- two file standards for certain kinds of data. Hopefully, this unfortunate situation is resolved soon.
+Not all of them can be loaded into the user interface since not all of them contain data that can be visualised. Things are additionally made difficult as the file standards for the programm are currently changed from GeoSys4 legacy files in ASCII format to XML files\footnote{http://www.w3.org/XML/}. For this reason there exists -- at least at the time of this writing -- two file standards for certain kinds of data. Currently the legacy files can still be read for the most part but not be written anymore. There is also a small file converter tool deployed with the OGS6 package (see section \ref{FileConverter})
 
-You can open native OGS files by clicking \cmd{File\ra Open...}\index{Loading geometry}\index{Loading meshes} or by clicking the folder icon in the respective Data View tab. Please note that the file \emph{must} have the correct file extension for the programme to correctly recognise the type.
+You can open all native OGS files by clicking \cmd{File\ra Open...}\index{Loading geometry}\index{Loading meshes}. As an alternative, files can also be opened by clicking the folder icon in the respective Data View tab. However, this will only allow to open files relevant for this specific tab, i.e. if the folder-icon in the \emph{Geometry}-tab is pressed, you will only be allowed to open geometry-data. Please note that all files \emph{must} have the correct file extension for the programme to correctly recognise their type.
 
 Supported XML file formats are:
 \begin{itemize}
 \item Geometry files: *.gml\\
         Points, polylines and surfaces\index{Geometry}
 \item Meshes: *.vtu\index{Meshes}\\
-        Domain discretisations. Note that this is a VTK-file format and you can use these exact files also in other VTK compliant software such as ParaView\index{ParaView}.
+        Domain discretisations in 1D, 2D and 3D. Note that this is a VTK-file format and you can use these exact files also in other VTK compliant software such as ParaView\index{ParaView}.
 \item Observation sites: *.stn\\
         Boreholes and data logger sites.\index{Observation Sites}
 \item FEM Conditions: *.cnd\\
@@ -64,6 +64,7 @@ Besides loading FEM Conditions via  \cmd{File\ra Open...}, it is also possible t
 For the visualisation, the correct scalar values in the render window will currently only be displayed for process distribution types ``CONSTANT'', ``LINEAR'' and ``DIRECT''.\footnote{For an overview over what process distribution types are, which types are supported by the system and how they influence a subsequent simulation please refer to a technical documentation of \ogs.}
 
 \subsubsection{Conversion of Native Files}
+\label{FileConverter}
 \index{OGS File Converter}
 
 It is possible to convert data between GeoSys4 ASCII files and \ogs XML files (and vice versa) via the \emph{OpenGeoSys File Converter}. The file converter can be called from \cmd{Tools\ra File Converter...} and is also available as a stand-alone tool upon download of \ogs. Simply select which type of file you would like to convert, specify file names and press okay.
@@ -146,26 +147,34 @@ You can also export data from \ogs into a number of graphics formats. This can b
 
 You can also export the complete scene into the graphic formats VTK, OpenSG or VRML format. To do this select \cmd{File\ra Export\ra Format}.
 
-\section{Removing Data}
-\index{Removing data}
-
-You can remove a data set loaded into \ogs by selecting the data set in its respective Data View and then pressing the red cross icon on top. Specifically you can also remove only polylines or surfaces only from a geometry. The only exception to this rule are geometric points which can only be removed if both surfaces and polylines are already deleted as both kinds of objects are dependent on points. Regardless of the previous remarks you can also remove geometries as whole.
-
 \section{Data Visualisation}
 \label{datavisualisation}
 
-Technically, data (or a representation thereof) loaded into the programme is displayed at three different locations in the Data Explorer (see figure \ref{fig:gui}):
+Technically, data (or a representation thereof) loaded into the programme is displayed at three different locations in the Data Explorer (see figure \ref{fig:gui}): The \emph{Data View} shows a tabular view of the data, the \emph{Render Window} shows  a 3D view of the data and the \emph{Visualization Pipeline} shows a representation of all visualised objects within a tree to allow the modification of the visualisation of a specific object. 
 
 \subsection{Data Views}
 \index{DataView}
 
-There are four different DataView-Tabs in the programme where the data is visible in the form of lists. Which of the tabs is used depends on the data. There is one tab for geometrical information, one for meshes, one for stations (i.e. observation sites) and one for modelling information (i.e. processes, boundary conditions, etc.)
+There are four different Data View-tabs in the programme where the data is visible in the form of lists. In which of the tabs the content of a specific file is displayed depends on the type of the data within that file. There is one tab for geometrical information, one for meshes (i.e. domain discretisations), one for stations (i.e. observation sites) and one for modelling information (i.e. processes, boundary conditions, etc.)
 
-The DataView for geometrical information contains a list of geometries. Each geometry-item has up to three children titled ``Points'', ``Polylines'' and ``Surfaces'' containing the information about the respective geometrical objects. For example, the item `Points' contains a list of points and for each item (i.e. each point) its index, the coordinates and (if existing) the name of the object can be displayed. Each geometry \emph{needs} to contain a list of points. Other geometrical objects (i.e. polylines or surfaces) are optional. Upon selecting a geometrical object in the DataView, the object will also be highlighted\index{Highlighting objects} in the render window. For better visibility a point will be marked by a small ball and a line by a tube.
+The Data View for geometrical information contains a list of geometries. Each geometry-item has up to three children titled ``Points'', ``Polylines'' and ``Surfaces'' containing the information about the respective geometrical objects. For example, the item `Points' contains a list of points and for each item (i.e. each point) its index, the coordinates and (if existing) the name of the object can be displayed. Each geometry \emph{must} contain a list of points. Other geometrical objects (i.e. polylines or surfaces) are optional. 
+Likewise, the Stations-tab contains a list of lists of observation sites which can in turn be expanded to see the individual sites/boreholes within each list. 
 
-Note, that the mesh-tab is subdivided into a view of the meshes loaded into the programme (and the elements contained within each mesh) and a second window called ``Element Properties''. If an element is selected in the Data View or picked from the Render Window, all available information concerning that element (such as nodes, volume, element type, etc.) will be displayed here. Likewise, if an element is selected in Data View it will be highlighted in the Render Window. As the element information becomes available under Element Properties, it is also possible to select a node from nodes list of the selected element. This node will then be highlighted as a small ball in the Render Window, similar to geometric points.
+The tab for Meshes contains a list of meshes loaded into the programme. Each mesh can be expanded to show a list of all the elements within that mesh, including its ID and type. Note, that the mesh-tab is subdivided into this list of meshes and a second window called ``Element Properties''. If a mesh is selected in the Data View, the second view will display properties of that mesh such as its name, number of nodes and elements, existing element types, the range of its material groups and the limits of the axis-aligned bounding box containing this mesh. This allows to get a quick overview over important properties of a mesh and might be used for a first error analysis by checking if certain types of elements are present in this mesh or if it's bounding box exceeds certain limits. If an element is selected in the Data View, all available information concerning that element, i.e. element type, material group, area/volume and a list of its nodes.
+
+Finally, the Modelling-tab contains a list of processes. These may contain lists of Boundary Conditions, Initial Conditions and Source term, which in turn can be expanded again to see the individual conditions as well as specific details such as the primary variable or the distribution type.
+
+
+\subsection{Highlighting Object from the Data View}
+\index{Highlighting objects}
+
+Data from the Geometry-tab and the Meshes-tab can also be highlighted in Render Window. Upon selecting a geometrical object in the Data View, the object will also be highlighted in the render window. For better visibility a point will be marked by a small ball and a line by a tube. A surface will be displayed using red colour.
+
+For meshes, selected elements are highlighted in the Render Window. As described in the previous section, properties of the selected element will also appear in the Element Properties-view in the same tab. It is also possible to pick a single element in the Render Window (for details on picking see section \ref{RenderWindow}) to display its properties. If element information is visible in the Element Properties view, it is also possible to select a node of that particular mesh element from the nodes list and this node will then be highlighted as a small ball in the Render Window, similar to the way geometric points are highlighted.
+
 
 \subsection{Render Window}
+\label{RenderWindow}
 \index{Render window}
 
 \begin{figure}[tb]
@@ -215,3 +224,7 @@ Certain non-native data sets imported into the Data Explorer do not fit into any
 
 Section \ref{filters} explains how you can employ the visualisation pipeline to apply filters the visualisation items. These filters allow changes of the way each object is visualised and they are quite handy to show certain aspects of the data.
 
+\section{Removing Data}
+\index{Removing data}
+
+You can remove a data set loaded into \ogs by selecting the data set in its respective Data View and then pressing the red cross icon on top. Specifically you can also remove only polylines or surfaces only from a geometry. The only exception to this rule are geometric points which can only be removed if both surfaces and polylines are already deleted as both kinds of objects are dependent on points. Regardless of the previous remarks you can also remove geometries as whole. 
