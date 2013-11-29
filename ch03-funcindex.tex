@@ -151,6 +151,7 @@ Topologically, the result will consisting of all faces of 3D mesh elements where
 
 
 \subsection{Mapping of Meshes based on DEMs}
+\label{meshondemmapping}
 \index{Mapping meshes}
 \index{Adding mesh layers based on DEM}
 
@@ -171,6 +172,7 @@ In general, $n+1$ raster files in *.asc format are required for mapping $n$ mesh
 For meshes containing only 2D elements there is also an option ``Remove mesh nodes at NoData values''. Per default this option is switched off as the correctness of the result is depending on the element size in these NoData locations.
 
 \subsection{Adding Layers of Fixed Size}
+\label{fixedsizelayers}
 \index{Adding mesh layers of fixed size}
 
 Besides adding subsurface layers using DEM-profiles as described in the previous section, a 2D mesh can also be extruded into a 3D mesh by copying the 2D mesh layer a specified number of times and then connected any two neighbouring layers by creating 3D elements from all corresponding 2D elements (i.e. two triangles are connected and form one prism-elements, two quadrilateral elements form one hexahedron). This functionality can also be accessed by right-clicking on a 2D mesh in the data view and selecting \cmd{Edit Mesh...}. Again, specify the number of layers you would like to add and select \cmd{Add layers with static thickness}. After that the thickness of each layer needs to be specified.

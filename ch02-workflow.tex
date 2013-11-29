@@ -111,20 +111,6 @@ Allows the import files created with the TetGen mesh generator. This interface c
 Files containing data for graphic objects, ranging from image files (*.vti) to structured (*.vts) or unstructured meshes (*.vtu). All data sets may include additional data in the form of scalar arrays. This interface should work perfectly.
 \end{itemize}
 
-\begin{figure}[tb]
-\parbox[b]{.45\linewidth}{
-    \includegraphics[width=.95\linewidth]{dataview}
-}
-\parbox[b]{.55\linewidth}{
-    \caption{The \emph{Data View} offers detailed information on loaded data sets. The icons on top will provide general functionality for this tab: The folder icon allows to open files, the disc icon is for saving data sets and the cross icon will remove the selected data set. The tabs at the bottom of the Data View will open the views for the respective kind of data. Right-clicking data sets will give options for additional, data-set related functionality.\\
-    The Mesh View depicted to the left also includes an additional window for viewing mesh element properties. This window will only contain information upon selecting a mesh element in the Data View above or in the Render Window.}
-}
-\label{fig:interfaces}
-\end{figure}
-
-\subsection{Saving Data}
-\index{Saving data}
-
 \section{Writing Data}
 \index{Saving data}
 
@@ -147,20 +133,30 @@ You can also export data from \ogs into a number of graphics formats. This can b
 
 You can also export the complete scene into the graphic formats VTK, OpenSG or VRML format. To do this select \cmd{File\ra Export\ra Format}.
 
+\begin{figure}[tb]
+\parbox[b]{.45\linewidth}{
+    \includegraphics[width=.95\linewidth]{dataview}
+}
+\parbox[b]{.55\linewidth}{
+    \caption{The \emph{Data View} offers detailed information on loaded data sets. The icons on top will provide general functionality for this tab: The folder icon allows to open files, the disc icon is for saving data sets and the cross icon will remove the selected data set. The tabs at the bottom of the Data View will open the views for the respective kind of data. Right-clicking data sets will give options for additional, data-set related functionality.\\
+    The Mesh View depicted to the left also includes an additional window for viewing mesh element properties. This window will only contain information upon selecting a mesh element in the Data View above or in the Render Window. \label{fig:dataview}}
+}
+\end{figure}
+
 \section{Data Visualisation}
 \label{datavisualisation}
 
-Technically, data (or a representation thereof) loaded into the programme is displayed at three different locations in the Data Explorer (see figure \ref{fig:gui}): The \emph{Data View} shows a tabular view of the data, the \emph{Render Window} shows  a 3D view of the data and the \emph{Visualization Pipeline} shows a representation of all visualised objects within a tree to allow the modification of the visualisation of a specific object. 
+Technically, data (or a representation thereof) loaded into the programme is displayed at three different locations in the Data Explorer (see figure \ref{fig:gui}): The \emph{Data View} shows a tabular view of the data, the \emph{Render Window} shows  a 3D view of the data and the \emph{Visualization Pipeline} shows a representation of all visualised objects within a tree to allow the modification of the visualisation of a specific object.
 
 \subsection{Data Views}
 \index{DataView}
 
 There are four different Data View-tabs in the programme where the data is visible in the form of lists. In which of the tabs the content of a specific file is displayed depends on the type of the data within that file. There is one tab for geometrical information, one for meshes (i.e. domain discretisations), one for stations (i.e. observation sites) and one for modelling information (i.e. processes, boundary conditions, etc.)
 
-The Data View for geometrical information contains a list of geometries. Each geometry-item has up to three children titled ``Points'', ``Polylines'' and ``Surfaces'' containing the information about the respective geometrical objects. For example, the item `Points' contains a list of points and for each item (i.e. each point) its index, the coordinates and (if existing) the name of the object can be displayed. Each geometry \emph{must} contain a list of points. Other geometrical objects (i.e. polylines or surfaces) are optional. 
-Likewise, the Stations-tab contains a list of lists of observation sites which can in turn be expanded to see the individual sites/boreholes within each list. 
+The Data View for geometrical information contains a list of geometries. Each geometry-item has up to three children titled ``Points'', ``Polylines'' and ``Surfaces'' containing the information about the respective geometrical objects. For example, the item `Points' contains a list of points and for each item (i.e. each point) its index, the coordinates and (if existing) the name of the object can be displayed. Each geometry \emph{must} contain a list of points. Other geometrical objects (i.e. polylines or surfaces) are optional.
+Likewise, the Stations-tab contains a list of lists of observation sites which can in turn be expanded to see the individual sites/boreholes within each list.
 
-The tab for Meshes contains a list of meshes loaded into the programme. Each mesh can be expanded to show a list of all the elements within that mesh, including its ID and type. Note, that the mesh-tab is subdivided into this list of meshes and a second window called ``Element Properties''. If a mesh is selected in the Data View, the second view will display properties of that mesh such as its name, number of nodes and elements, existing element types, the range of its material groups and the limits of the axis-aligned bounding box containing this mesh. This allows to get a quick overview over important properties of a mesh and might be used for a first error analysis by checking if certain types of elements are present in this mesh or if it's bounding box exceeds certain limits. If an element is selected in the Data View, all available information concerning that element, i.e. element type, material group, area/volume and a list of its nodes.
+The tab for Meshes contains a list of meshes loaded into the programme. Each mesh can be expanded to show a list of all the elements within that mesh, including its ID and type. Note, that the mesh-tab is subdivided into this list of meshes and a second window called ``Element Properties'' (see figure \ref{fig:dataview}). If a mesh is selected in the Data View, the second view will display properties of that mesh such as its name, number of nodes and elements, existing element types, the range of its material groups and the limits of the axis-aligned bounding box containing this mesh. This allows to get a quick overview over important properties of a mesh and might be used for a first error analysis by checking if certain types of elements are present in this mesh or if it's bounding box exceeds certain limits. If an element is selected in the Data View, all available information concerning that element, i.e. element type, material group, area/volume and a list of its nodes.
 
 Finally, the Modelling-tab contains a list of processes. These may contain lists of Boundary Conditions, Initial Conditions and Source term, which in turn can be expanded again to see the individual conditions as well as specific details such as the primary variable or the distribution type.
 
