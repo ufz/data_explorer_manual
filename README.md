@@ -2,10 +2,10 @@
 
 ## What is this? ##
 
-These are the LaTeX-sources and images to compile the [OpenGeoSys](http://www.opengeosys.net) Data Explorer Manual. Please report any errors, typos, unexplained features or anything else
+These are the LaTeX-sources and images to compile the [OpenGeoSys](http://www.opengeosys.org) Data Explorer Manual. Please report any errors, typos, unexplained features or anything else
 regarding the Data Explorer or its documentation.
 
-A compiled PDF of these sources is available on the [OGS Wiki](https://svn.ufz.de/ogs).
+A compiled PDF of these sources is available under "Releases" and on the [OGS Wiki](https://svn.ufz.de/ogs).
 
 ## License ##
 
