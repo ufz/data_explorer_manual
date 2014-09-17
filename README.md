@@ -5,7 +5,7 @@
 These are the LaTeX-sources and images to compile the [OpenGeoSys](http://www.opengeosys.org) Data Explorer Manual. Please report any errors, typos, unexplained features or anything else
 regarding the Data Explorer or its documentation.
 
-- Download as PDF: [![PDF Status](https://www.sharelatex.com/github/repos/ufz/data_explorer_manual/builds/latest/badge.svg)](https://www.sharelatex.com/github/repos/ufz/data_explorer_manual/builds/latest/output.pdf)
+- [Download as PDF](http://bit.ly/1md2CbY)
 
 ## License ##
 
