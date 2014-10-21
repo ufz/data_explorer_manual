@@ -9,6 +9,18 @@
 \usepackage{amsmath}          % the one and only AMS-Math
 \usepackage{makeidx}          % creating an index
 \usepackage{wrapfig}          % using floating figures
+\usepackage{url}
+\usepackage{hyperref}         % hyper-references in document
+
+\hypersetup{
+  pdfcreator={LaTeX2e},
+  plainpages=false,          % For problems with page referencing
+  hypertexnames=false,       % For handling subfigures correctly
+  pdfpagemode=UseNone,       % Fit screen (or "`FullScreen"')
+  pdfstartview=Fit,
+  breaklinks=true,           % Allow breaks in links
+  colorlinks=false           % Don't change coloring of links
+}
 
 % ----------------------------------------------------------
 % My own commands
@@ -16,7 +28,9 @@
 \newcommand{\mynote}[1]{\emph{\textbf{\textcolor{red}{#1}}}}
 \newcommand{\ra}{$\rightarrow$}
 \newcommand{\cmd}[1]{\texttt{#1}}
-\newcommand{\ogs}{OpenGeoSys }
+\newcommand{\ogs}{\emph{OpenGeoSys}}
+\newcommand{\de}{\emph{DataExplorer}}
+\newcommand{\ogsde}{\ogs{} \de{}}
 \newcommand{\bstart}[1]{\noindent\textbf{#1} }
 \newcommand{\degree}{\ensuremath{^\circ}}
 
@@ -38,7 +52,7 @@
 \renewcommand{\headrulewidth}{0.4pt}
 \renewcommand{\footrulewidth}{0pt}
 \fancyhead{} \fancyfoot{}
-\fancyhead[RE]{The OpenGeoSys Data Explorer}
+\fancyhead[RE]{The OpenGeoSys Data Explorer Manual}
 %\fancyhead[RE]{\nouppercase{\leftmark}}
 \fancyhead[LO]{\nouppercase{\leftmark}}
 \fancyhead[LE,RO]{\thepage}

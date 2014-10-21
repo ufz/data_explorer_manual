@@ -1,36 +1,63 @@
 \chapter{Introduction}
 
-This manual has been written to give a quick overview over the functionality of the \ogs Data Explorer. Existing functionality is explained and typical workflows are detailed step by step.
+This manual has been written to give a quick overview over the functionality of the \ogsde{}. Existing functionality is explained and typical workflows are detailed step by step.
 
 \bigskip
 
-\ogs (formerly Rockflow) is a programme for the simulation of (coupled) thermal, hydrological, mechanical and chemical processes. Over various iterations the software is about $20$ years old and compiles a large amount of functionality, interfaces and numerical solvers. It is, however, a command line tool. Therefore, it is difficult to get a feeling for the data that is handled by the programme and simulation results cannot be directly verified without the help of other tools.
+\ogs{} (formerly Rockflow) is an open-source programme for the simulation of (coupled) thermal, hydrological, mechanical and chemical processes. Over various iterations the software is about $20$ years old and compiles a large amount of functionality, interfaces and numerical solvers. It is, however, a command line tool. Therefore, it is difficult to get a feeling for the data that is handled by the programme and input data as well as simulation results cannot be directly verified without the help of other programmes.
 
-The \ogs Data Explorer is a graphical user interface (GUI) has been developed to fill that gap and provides a means for the visualisation of data. It employs the same basic data structures as the command line tool and thus complements \ogs by giving the user a way to visually assess the data and see possible errors, inconsistencies or missing information.
+The \ogsde{} is a graphical user interface (GUI) has been developed to fill that gap and provide the necessary functionality for the visualisation of such data. It employs the same basic data structures as the command line tool and thus complements \ogs{} by giving the user a way to visually assess the data and see possible artefacts, inconsistencies between data sets or missing information.
 
-However, it is important to keep in mind that the \ogs Data Explorer is \emph{not} a fully developed tool with a defined scope of functionality. Features are constantly being added and while everyone is making an effort to keep things as straightforward and robust as possible, it can be difficult to find out what the programme is currently capable of and how exactly things need to be done.
+However, it is important to keep in mind that the \ogsde{} is not yet \emph{not} a fully developed programme with a defined scope of functionality. Features are constantly being added and while everyone is making an effort to keep things as straightforward and robust as possible, it can be difficult to find out what the software is currently capable of and how exactly things need to be done.
 
-This manual will give you an overview of the features of the programme, how things work and what possible problems you might encounter. For more information on \ogs itself check out the OGS-Wiki\footnote{https://svn.ufz.de/ogs}.\index{OGS Wiki}
+This manual will give an overview of features implemented in the programme, how things work and what possible problems might occur in certain situations. For more information on \ogs{} itself check out the \ogs{}-website\footnote{\url{http://www.opengeosys.org}}.\index{OGS Website}
 
-It is also highly recommended to always use the latest version of \ogs which is available on the Jenkins\footnote{http://jenkins-ci.org/} Build Server\footnote{https://svn.ufz.de/jenkins/}\index{Jenkins Build Server}.
+It is also highly recommended to always use the latest version of the  of the \de{} to be able to make use of recently implemented functionality, bug fixes, etc. The programme is available from the OGS-website or from the Github repository at \url{https://github.com/ufz/ogs}.
 
-\subsection*{Important concepts}
+\section{User Interface Components}
 
 \begin{figure}[tb]
 \begin{center}
 \includegraphics[width=0.99\linewidth]{gui}
-\caption{The graphical user interface of the \ogs Data Explorer.}
+\caption{The graphical user interface of the \ogsde{}.}
 \label{fig:gui}
 \end{center}
 \end{figure}
 
-Within this manual a number of terms will appear over and over and it is important to know what they mean, to be able to follow the instructions.
+Within this manual a number of specific terms will be used to refer to certain components of the \ogsde{}-framework. This section will give an overview of these components, such that readers will be able to follow the instructions in the following chapters.
 
-Figure \ref{fig:gui} shows a screenshot of the GUI of the \ogs Data Explorer. The three basic parts of the user interface are marked as ``Data View'', ``Render Window'' and ``Visualisation Pipeline''. These elements and the information they contain are explained in detail in section \ref{datavisualisation} and these names will pop up again and again in this manual so it is important to recognise which parts of the graphical user interface they specify. Additional windows might pop up from time to time for data that is not suitable for 3D visualisation, such as time series sensor data or borehole stratigraphies. 
+Figure \ref{fig:gui} shows an illustration of the GUI of the \ogsde{}. The three basic parts of the user interface are marked as ``Data View'', ``Render Window'' and ``Visualisation Pipeline''. These elements and the information they contain are explained in detail in section \ref{datavisualisation} and these names will appear again and again in this manual so it is important to recognise which parts of the graphical user interface they specify. Additional windows might pop up from time to time for data that is not suitable for 3D visualisation, such as time series sensor data or borehole stratigraphies.
 
-\ogs is written in the C++ programming language. As many other programming languages it allows the developer to add so called libraries that define a certain set of functionality. This means a programmer does not need to implement every function provided by a programme himself but instead can depend on functionality provided by the library. The Data Explorer makes use of a number of such libraries. The two most important ones are called Qt\footnote{http://qt.nokia.com} and VTK\footnote{http://www.vtk.org}. 
+\ogs is written in the C++ programming language. As many other programming languages it allows the developer to add so-called libraries that define a certain set of functionality. This means a programmer does not need to implement every function provided by a programme himself but instead can depend on functionality provided by the library. The \de{} makes use of a number of such libraries. The two most important ones are called Qt\footnote{\url{http://qt.nokia.com}} and VTK\footnote{\url{http://www.vtk.org}}.
 
-Qt\index{Qt} is a library mainly providing functionality for a user interface, i.e. the definition of windows, dialogues and everything you expect to see in there, such as buttons, lists, menus, etc. Qt offers a lot more than that but explaining it all would go beyond the scope of this manual. Elements of the Data Explorer that make use of Qt are for instance the ``Data View'' or the windows displaying diagrams or borehole stratigraphies.
+Qt\index{Qt} is a library mainly providing functionality for a user interface, i.e. the definition of windows, dialogues and everything you expect to see in there, such as buttons, lists, menus, etc. Qt offers a lot more than that, the interested reader is referred to the Qt-website for more information. Elements of the \ogsde{} that make use of Qt are for instance the ``Data View'' or the windows displaying diagrams or borehole stratigraphies.
 
-VTK\index{VTK} (``\textbf{V}isualisation \textbf{T}ool\textbf{k}it'') is a graphics library which can be employed for the visualisation of objects in 3D. It also includes functionality to read and write these 3D objects from and to files. These ``VTK-files'' and can also be used by the Data Explorer but also by any other programme supporting VTK, such as ParaView\footnote{http://www.paraview.org}\index{ParaView} or OpenFOAM\footnote{http://www.openfoam.com}\index{OpenFOAM}. The ``Render Window'' of the Data Explorer and anything that is displayed within has been constructed using VTK.
+VTK\index{VTK} (``\textbf{V}isualisation \textbf{T}ool\textbf{k}it'') is a graphics library which can be employed for the visualisation of objects in 3D. It also includes functionality to read and write these 3D objects from and to files. These VTK-files and can also be read and written by the \ogsde{} as well as other software supporting VTK, including ParaView\footnote{http://www.paraview.org}\index{ParaView} or OpenFOAM\footnote{http://www.openfoam.com}\index{OpenFOAM}. The ``Render Window'' of the \de{} and anything that is displayed within has been constructed using VTK.
+
+\section{OGS Download and Installation}
+
+The \ogsde{} is available for $64$-bit \emph{Ubuntu-} and \emph{Mac OS X} systems as well as for $32$- or $64$-bit \emph{Windows} operation systems, respectively. It is recommended to download the $64$-bit version for 64-bit \emph{Windows.} The binary files needed to run the programme can be found at \url{http://www.opengeosys.org/resources/downloads}. The console version of the \ogs{} simulation software is available on the same website.\index{Download}
+
+To use \ogs{} or the \de{} under \emph{Windows,} it is necessary to additionally download and install the free ``Visual Studio 2013 Redistributable''-package\index{Redistributable Package} from \emph{Microsoft.} It is available directly on the \ogs{} download page or from \url{http://www.microsoft.com}. The downloaded version of this package needs to be for the same architecture (i.e. 32- or 64-bit) as the downloaded version for the \de{}. Without this additional package, DLL-related error messages will be displayed on start-up.
+
+Once all necessary packages are installed, the \de{} needs only to be extracted from the downloaded zip-files to any directory and can be run instantly. For \emph{Windows,} start \cmd{ogs-gui.exe} to run the GUI. Using \emph{Ubuntu} or \emph{Mac OS X,} the programme can be started by calling \cmd{./ogs-gui}.\index{Installation}
+
+\subsection*{Additional Software}
+
+For be able to use the full functionality of the \de{}, two additional utilities are needed. Both are \emph{not} strictly required, but the functionality for creating finite element meshes described in this tutorial will not work without these additional programmes.
+
+The first programme is the finite element mesh generator \emph{GMSH.}\index{GMSH} It is freely available and required for creating domain discretisations (meshes) from geometry (see section \ref{meshcreation}). The software is available for \emph{Linux, Mac OS X} and \emph{Windows} and installation files can be found at \url{http://geuz.org/gmsh/}. The second utility is the \emph{TetGen}\index{TetGen} finite mesh generator\footnote{The source code for \emph{TetGen} is available from the Weierstrass Institute Berlin at \url{http://wias-berlin.de/software/tetgen/}. A binary file is available from the UFZ GitHub reprository at \url{https://github.com/ufz/tetgen}.}. It is required for creating 3D tetrahedral meshes from 2D meshes as described in section \ref{meshondemmapping}.
+
+While \emph{TetGen} is used only indirectly by the \de{}, GMSH can be directly controlled via user interface dialogues. Therefore, it is recommended on first start-up of  the \emph{Data Explorer} to set the location of this programme. This is done by selecting \cmd{Settings \ra Data Explorer Settings...}. A new dialogue will open where the location can be specified.
+
+\section{Source Code Availability}
+
+As mentioned before, \emph{OpenGeoSys} is a cross-platform open-source software. If \emph{OGS} should be run on an operating system where no binary files are available, it is still possible to download and compile the source code.
+
+All necessary files as well as the manual may be found on GitHub at \url{https://github.com/ufz/ogs}. A developer guide detailing everything necessary for compilation can be found at \url{http://docs.opengeosys.org}. You are also invited to join further development of the software if you are inclined to do so.
+
+\emph{OpenGeoSys} and the \emph{Data Explorer} are available under BSD license, i.e.~both are free for non-commercial use as as long as  the \emph{OpenGeoSys Community} is referenced as the developer of the software. The exact conditions of use can be found in the file \cmd{LICENSE.txt} on the GitHub-repository.
+
+
+
 
