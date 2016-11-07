@@ -1,7 +1,7 @@
 node('docker') {
     checkout scm
 
-    def image = docker.image('hiono/texlive')
+    def image = docker.image('ogs6/latex')
     image.pull()
     image.inside() {
         sh """
